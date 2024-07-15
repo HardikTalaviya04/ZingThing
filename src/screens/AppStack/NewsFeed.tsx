@@ -38,10 +38,10 @@ export default function NewsFeed() {
       });
       // setResumeData(res);
       if (res && res[0].uri) {
-        console.log('object', res);
         const path = await copyDocumentToAppDirectory(res[0]);
-        postData(res[0], path);
+        console.log('--object--', res,path);
         setdocumentPath(path);
+        postData(res[0], path);
       } else {
         Alert.alert('Error', 'Selected document URI is undefined');
       }
@@ -101,37 +101,46 @@ export default function NewsFeed() {
   //   });
   // };
 
-  // const postData = async () => {
-  //   try {
-  //     const formdata = new FormData();
+  const postData = async (data,path) => {
+    try {
+      const Fdata = new FormData();
+      Fdata.append('document', {
+        uri:data.uri,
+        type:data.type,
+        name:data.name
+      });
+      Fdata.append('vendor_id','2');
+      Fdata.append('create_date','12/06/2024');
+      Fdata.append('expire_date','20/06/2024');
+      Fdata.append('paid','Yes');
+      console.log('hardik', data.uri,data.type,data.name,Fdata);
 
-  //     formdata.append('document', data.uri);
-  //     console.log('hardik', formdata);
+      const response = await fetch(
+        'https://zingthing.ptechwebs.com/api/newsfeeds-add',
+        {
+          method: 'POST',
+          headers: {
+            'Accept': 'application/json',
+            
+          },
+          body: Fdata,
+        },
+      );
 
-  //     const response = await fetch(
-  //       'https://zingthing.ptechwebs.com/api/newsfeeds-add',
-  //       {
-  //         method: 'POST',
-  //         headers: {
-  //           'Content-Type': 'application/json',
-  //         },
-  //         body: formdata,
-  //       },
-  //     );
+      if (!response.ok) {
+        throw new Error('Network response was not ok');
+      }
 
-  //     if (!response.ok) {
-  //       throw new Error('Network response was not ok');
-  //     }
-
-  //     const json = await response.json();
-  //     console.log('hardik', json);
-  //     // setResponseMessage(json.message);
-  //     Alert.alert('Success', 'Data posted successfully');
-  //   } catch (error) {
-  //     // setResponseMessage(error.message);
-  //     Alert.alert('Error', JSON.stringify(error));
-  //   }
-  // };
+      const json = await response.json();
+      console.log('hardik', json);
+      // setResponseMessage(json.message);
+      Alert.alert('Success', 'Data posted successfully');
+    } catch (error) {
+      console.log('--error--',error)
+      // setResponseMessage(error.message);
+      Alert.alert('Error', JSON.stringify(error));
+    }
+  };
 
   const renderItem = ({item}) => {
     return (
