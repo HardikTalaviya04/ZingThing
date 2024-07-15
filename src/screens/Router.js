@@ -1,11 +1,14 @@
 //import liraries
-import React from 'react';
-import {Image, Platform, LogBox, Text} from 'react-native';
-import {NavigationContainer} from '@react-navigation/native';
-import {createNativeStackNavigator} from '@react-navigation/native-stack';
-import {SplashScreen} from './AuthStack/SplashScreen';
-import {SCREENS} from '../common/Utils/screenName';
-import NewsFeed from './AppStack/NewsFeed';
+import React from "react";
+import { Image, Platform, LogBox, Text } from "react-native";
+import { NavigationContainer } from "@react-navigation/native";
+import { createNativeStackNavigator } from "@react-navigation/native-stack";
+import { SplashScreen } from "./AuthStack/SplashScreen";
+import { SCREENS } from "../common/Utils/screenName";
+import NewsFeed from "./AppStack/NewsFeed";
+import DashBoard from "./AppStack/DashBoard";
+import MyJobs from "./AppStack/MyJobs";
+import JobDetailsScreen from "./AppStack/JobDetailsScreen";
 
 LogBox.ignoreAllLogs();
 
@@ -19,16 +22,32 @@ const Router = () => {
         initialRouteName={SCREENS.SplashScreen}
         screenOptions={{
           headerShown: false,
-        }}>
+        }}
+      >
         <Stack.Screen
           name={SCREENS.SplashScreen}
           component={SplashScreen}
-          options={{headerShown: false}}
+          options={{ headerShown: false }}
+        />
+        <Stack.Screen
+          name={SCREENS.DashBoard}
+          component={DashBoard}
+          options={{ headerShown: false }}
         />
         <Stack.Screen
           name={SCREENS.NewsFeed}
           component={NewsFeed}
-          options={{headerShown: false}}
+          options={{ headerShown: false }}
+        />
+        <Stack.Screen
+          name={SCREENS.MyJobs}
+          component={MyJobs}
+          options={{ headerShown: false }}
+        />
+        <Stack.Screen
+          name={SCREENS.JobDetailsScreen}
+          component={JobDetailsScreen}
+          options={{ headerShown: false }}
         />
       </Stack.Navigator>
     </NavigationContainer>

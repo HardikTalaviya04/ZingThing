@@ -1,7 +1,10 @@
 export const SCREENS = {
   //Auth
-  SplashScreen: 'SplashScreen',
+  SplashScreen: "SplashScreen",
 
   //App
-  NewsFeed: 'NewsFeed',
+  DashBoard: "DashBoard",
+  NewsFeed: "NewsFeed",
+  MyJobs: "MyJobs",
+  JobDetailsScreen: "JobDetailsScreen",
 };

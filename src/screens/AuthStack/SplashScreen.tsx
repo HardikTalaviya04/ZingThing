@@ -1,4 +1,4 @@
-import React, {useEffect, useState} from 'react';
+import React, { useEffect, useState } from "react";
 import {
   StatusBar,
   Platform,
@@ -7,24 +7,24 @@ import {
   View,
   Dimensions,
   Text,
-} from 'react-native';
-import {useIsFocused, useNavigation} from '@react-navigation/native';
-import AsyncStorage from '@react-native-async-storage/async-storage';
-import {IMAGE} from '../../common/Utils/image';
-import {COLORS} from '../../common/Utils/Colors';
-import {SCREENS} from '../../common/Utils/screenName';
-import {RFValue} from 'react-native-responsive-fontsize';
+} from "react-native";
+import { useIsFocused, useNavigation } from "@react-navigation/native";
+import AsyncStorage from "@react-native-async-storage/async-storage";
+import { IMAGE } from "../../common/Utils/image";
+import { COLORS } from "../../common/Utils/Colors";
+import { SCREENS } from "../../common/Utils/screenName";
+import { RFValue } from "react-native-responsive-fontsize";
 
 export const SplashScreen = () => {
   const navigation: any = useNavigation();
   const isFocus = useIsFocused();
 
-  const ScreenHeight = Dimensions.get('screen').height;
-  const ScreenWidth = Dimensions.get('screen').width;
+  const ScreenHeight = Dimensions.get("screen").height;
+  const ScreenWidth = Dimensions.get("screen").width;
 
   useEffect(() => {
     (async () => {
-      const B_Token = await AsyncStorage.getItem('auth_token');
+      const B_Token = await AsyncStorage.getItem("auth_token");
       setTimeout(
         () => {
           if (B_Token != null) {
@@ -35,11 +35,11 @@ export const SplashScreen = () => {
           } else {
             navigation.reset({
               index: 0,
-              routes: [{name: SCREENS.NewsFeed}],
+              routes: [{ name: SCREENS.DashBoard }],
             });
           }
         },
-        Platform.OS == 'android' ? 3000 : 2000,
+        Platform.OS == "android" ? 3000 : 2000
       );
     })();
   }, []);
@@ -49,9 +49,9 @@ export const SplashScreen = () => {
       <StatusBar
         translucent={true}
         backgroundColor={COLORS.PrimeryColor}
-        barStyle={'light-content'}
+        barStyle={"light-content"}
       />
-      <Text style={{color: COLORS.White, fontSize: RFValue(20)}}>
+      <Text style={{ color: COLORS.White, fontSize: RFValue(20) }}>
         Zing Thing
       </Text>
     </View>
@@ -62,7 +62,7 @@ const styles = StyleSheet.create({
   mainBody: {
     flex: 1,
     backgroundColor: COLORS.PrimeryColor,
-    justifyContent: 'center',
-    alignItems: 'center',
+    justifyContent: "center",
+    alignItems: "center",
   },
 });
