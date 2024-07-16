@@ -9,7 +9,7 @@ import NewsFeed from "./AppStack/NewsFeed";
 import DashBoard from "./AppStack/DashBoard";
 import MyJobs from "./AppStack/MyJobs";
 import JobDetailsScreen from "./AppStack/JobDetailsScreen";
-import FindJobs from "./AppStack/FindJobs";
+import PostJob from "./AppStack/PostJob";
 
 LogBox.ignoreAllLogs();
 
@@ -20,16 +20,11 @@ const Router = () => {
   return (
     <NavigationContainer>
       <Stack.Navigator
-        initialRouteName={'FindJobs'}
+        initialRouteName={"FindJobs"}
         screenOptions={{
           headerShown: false,
         }}
       >
-      <Stack.Screen
-        name={'FindJobs'}
-        component={FindJobs}
-        options={{ headerShown: false }}
-      />
         <Stack.Screen
           name={SCREENS.SplashScreen}
           component={SplashScreen}
@@ -53,6 +48,11 @@ const Router = () => {
         <Stack.Screen
           name={SCREENS.JobDetailsScreen}
           component={JobDetailsScreen}
+          options={{ headerShown: false }}
+        />
+        <Stack.Screen
+          name={SCREENS.PostJob}
+          component={PostJob}
           options={{ headerShown: false }}
         />
       </Stack.Navigator>

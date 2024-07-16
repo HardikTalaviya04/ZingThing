@@ -13,6 +13,7 @@ import { IMAGE } from "../Utils/image";
 import { COLORS } from "../Utils/Colors";
 import { FONTS } from "../Utils/fonts";
 import { useNavigation } from "@react-navigation/native";
+import { SCREENS } from "../Utils/screenName";
 const ScreenHeight = Dimensions.get("screen").height;
 const ScreenWidth = Dimensions.get("screen").width;
 const OnBordingHeader = ({ label, Back = true, isMyJob = false }: any) => {
@@ -45,7 +46,7 @@ const OnBordingHeader = ({ label, Back = true, isMyJob = false }: any) => {
               right: RFValue(10),
               borderRadius: RFValue(2),
             }}
-            // onPress={() => navigation.goBack()}
+            onPress={() => navigation.navigate(SCREENS.PostJob)}
           >
             <Text
               style={{

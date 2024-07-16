@@ -18,6 +18,7 @@ import { RFValue } from "react-native-responsive-fontsize";
 import { FONTS } from "../../common/Utils/fonts";
 import DocumentPicker from "react-native-document-picker";
 import RNFS from "react-native-fs";
+import DownloadFile from "../../common/Components/DownloadFile";
 
 export default function NewsFeed() {
   const [screenState, setscreenState] = useState(0);
@@ -88,19 +89,6 @@ export default function NewsFeed() {
     fetchData();
   }, []);
 
-  // const postData = async (data, path) => {
-  //   const formdata = new FormData();
-  //   formdata.append('vendor_id', '2');
-  //   formdata.append('create_date', '12/06/2024');
-  //   formdata.append('expire_date', '20/06/2024');
-  //   formdata.append('paid', 'Yes');
-  //   formdata.append('document', {
-  //     uri: document.uri,
-  //     name: document.name,
-  //     type: document.type,
-  //   });
-  // };
-
   const postData = async (data, path) => {
     try {
       const Fdata = new FormData();
@@ -144,6 +132,10 @@ export default function NewsFeed() {
   };
 
   const renderItem = ({ item }) => {
+    // const Views = item.user;
+    // const arrayLength = Views.length;
+    // console.log(arrayLength);
+    // console.log(Views);
     return (
       <View
         style={{
@@ -182,7 +174,7 @@ export default function NewsFeed() {
           News Feed Expires : {item.expire_date}
         </Text>
         <TouchableOpacity
-          onPress={() => console.log("object")}
+          onPress={() => DownloadFile({ FileUrl: item.document })}
           activeOpacity={0.7}
           style={{
             backgroundColor: COLORS.Black,
@@ -202,7 +194,7 @@ export default function NewsFeed() {
           }}
         >
           <Text style={{ color: "#F58D3A", fontWeight: "bold" }}>
-            Total View : {item.user ? item.user : 0}
+            Total View : {item.user ? 1 : 0}
           </Text>
         </View>
       </View>

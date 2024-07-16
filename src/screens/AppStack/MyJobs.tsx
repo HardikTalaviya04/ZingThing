@@ -17,23 +17,68 @@ import OnBordingHeader from "../../common/Components/OnBordingHeader";
 import { IMAGE } from "../../common/Utils/image";
 import { RFValue } from "react-native-responsive-fontsize";
 import { FONTS } from "../../common/Utils/fonts";
-import { useNavigation } from "@react-navigation/native";
+import { useIsFocused, useNavigation } from "@react-navigation/native";
 import { SCREENS } from "../../common/Utils/screenName";
+import moment from "moment";
 
 export default function MyJobs() {
   const [screenState, setscreenState] = useState(0);
-  const [mainDataForFirst, setMainDataForFirst] = useState([1, 2, 3, 4, 5]);
+  const [mainDataForFirst, setMainDataForFirst] = useState([]);
   const [mainDataForSecoend, setMainDataForSecoend] = useState([
     1, 2, 3, 4, 5, 6, 7, 8, 9,
   ]);
   const ScreenHeight = Dimensions.get("screen").height;
   const ScreenWidth = Dimensions.get("screen").width;
   const navigation = useNavigation();
+  const focus = useIsFocused();
+
+  const fetchData = async () => {
+    try {
+      const response = await fetch(
+        // "https://zingthing.ptechwebs.com/api/jobpost/1"
+        "https://zingthing.ptechwebs.com/api/jobpost-list/1"
+      );
+      const json = await response.json();
+      console.log("object", json.data);
+      setMainDataForFirst(json.data);
+    } catch (error) {
+      // setError(error);
+    } finally {
+      // setLoading(false);
+    }
+    try {
+      const response = await fetch(
+        // "https://zingthing.ptechwebs.com/api/jobpost/1"
+        "https://zingthing.ptechwebs.com/api/available-candiates-list/1"
+      );
+      const json = await response.json();
+      console.log("object", json.data);
+      setMainDataForSecoend(json.data);
+    } catch (error) {
+      // setError(error);
+    } finally {
+      // setLoading(false);
+    }
+  };
+
+  useEffect(() => {
+    fetchData();
+  }, [focus]);
   const renderItemForFirst = ({ item }) => {
+    const checkExpiration = (creationDate, expirationDays) => {
+      const expirationDate = moment(creationDate).add(expirationDays, "days");
+      const currentDate = moment();
+
+      return currentDate.isAfter(expirationDate);
+    };
+
+    const isExpired = checkExpiration(item.job_post_date, item.job_post_days);
+
     return (
       <View style={styles.subBodyContainer}>
         <View style={styles.firstSubBodyContainer}>
           <TouchableOpacity
+            activeOpacity={1}
             style={{
               backgroundColor: COLORS.SkyBlue,
               borderRadius: RFValue(2),
@@ -58,7 +103,7 @@ export default function MyJobs() {
               fontWeight: "400",
             }}
           >
-            May 6th, 2024 05:53PM
+            {moment(item.created_at).format("MMMM Do YYYY, h:mmA")}
           </Text>
         </View>
         <View style={styles.Sprator} />
@@ -73,7 +118,8 @@ export default function MyJobs() {
               width: ScreenWidth * 0.45,
             }}
           >
-            JOB ID: #JOB23984
+            {/* JOB ID: #JOB23984 */}
+            {`JOB ID: #JOB${item.id}`}
           </Text>
           <View style={styles.BlackSprator} />
           <Text
@@ -105,13 +151,13 @@ export default function MyJobs() {
             </Text>
             <Text
               style={{
-                color: COLORS.Red,
+                color: isExpired ? COLORS.Red : COLORS.Green,
                 fontSize: RFValue(16),
                 fontWeight: "400",
                 width: ScreenWidth * 0.48,
               }}
             >
-              Expired
+              {isExpired ? "Expired" : "Active"}
             </Text>
           </View>
           <View>
@@ -133,7 +179,8 @@ export default function MyJobs() {
                 width: ScreenWidth * 0.48,
               }}
             >
-              ₹ 15.00
+              {/* ₹ 15.00 */}
+              {`₹ ${item.job_post_rupees}`}
             </Text>
           </View>
         </View>
@@ -173,7 +220,10 @@ export default function MyJobs() {
               width: "100%",
             }}
           >
-            Hiring a account manager with 2+ yrs exp
+            {/* Hiring a account manager with 2+ yrs exp */}
+            {`Hiring a ${item.job_title.toLowerCase()} with ${
+              item.experience
+            } of exp`}
           </Text>
         </View>
       </View>
@@ -201,21 +251,26 @@ export default function MyJobs() {
       >
         <View>
           <Text style={[styles.secoendListBoxText, { paddingTop: RFValue(8) }]}>
-            Candiate Name : ABC
+            Candiate Name : {item.name}
           </Text>
-          <Text style={styles.secoendListBoxText}>Location : Delhi</Text>
+          <Text style={styles.secoendListBoxText}>Location : {item.city}</Text>
           <Text style={styles.secoendListBoxText}>
-            Experience : 2 + Yrs Exp
+            Experience : {item.job_posts.experience.toLowerCase()} of Exp
           </Text>
           <Text
             style={[styles.secoendListBoxText, { paddingBottom: RFValue(8) }]}
           >
-            Salary Expected : 10,000+
+            Salary Expected :{" "}
+            {item.job_posts.salary_range
+              ? item.job_posts.salary_range
+              : "10000+"}
           </Text>
         </View>
         <TouchableOpacity
           activeOpacity={0.5}
-          onPress={() => navigation.navigate(SCREENS.JobDetailsScreen)}
+          onPress={() =>
+            navigation.navigate(SCREENS.JobDetailsScreen, { Job_Id: item.id })
+          }
           style={{
             position: "absolute",
             top: RFValue(8),
@@ -233,7 +288,9 @@ export default function MyJobs() {
         </TouchableOpacity>
         <TouchableOpacity
           activeOpacity={0.5}
-          onPress={() => navigation.navigate(SCREENS.JobDetailsScreen)}
+          onPress={() =>
+            navigation.navigate(SCREENS.JobDetailsScreen, { Job_Id: item.id })
+          }
           style={{
             backgroundColor: COLORS.SkyBlue,
             paddingHorizontal: RFValue(12),
@@ -250,7 +307,7 @@ export default function MyJobs() {
               fontWeight: "bold",
             }}
           >
-            JOB ID : 1233454
+            JOB ID : {item.id}
           </Text>
         </TouchableOpacity>
       </View>
@@ -331,7 +388,7 @@ export default function MyJobs() {
                 fontWeight: "bold",
               }}
             >
-              Available Candiates
+              Available candidates
             </Text>
           </TouchableOpacity>
         </View>
@@ -380,7 +437,10 @@ export default function MyJobs() {
         </View>
         {screenState == 0 ? (
           <FlatList
-            contentContainerStyle={{ marginTop: RFValue(15) }}
+            contentContainerStyle={{
+              marginTop: RFValue(15),
+              paddingBottom: RFValue(40),
+            }}
             showsVerticalScrollIndicator={false}
             data={mainDataForFirst}
             renderItem={renderItemForFirst}
@@ -399,6 +459,9 @@ export default function MyJobs() {
               Candidates matching Job posts
             </Text>
             <FlatList
+              contentContainerStyle={{
+                paddingBottom: RFValue(20),
+              }}
               showsVerticalScrollIndicator={false}
               data={mainDataForSecoend}
               renderItem={renderItemForSecoend}

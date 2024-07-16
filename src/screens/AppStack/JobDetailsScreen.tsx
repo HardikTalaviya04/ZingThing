@@ -5,19 +5,41 @@ import {
   TouchableOpacity,
   View,
 } from "react-native";
-import React from "react";
+import React, { useEffect, useState } from "react";
 import { COLORS } from "../../common/Utils/Colors";
 import OnBordingHeader from "../../common/Components/OnBordingHeader";
 import { RFValue } from "react-native-responsive-fontsize";
-import { useNavigation } from "@react-navigation/native";
+import { useIsFocused, useNavigation } from "@react-navigation/native";
 import { SCREENS } from "../../common/Utils/screenName";
 
-export default function JobDetailsScreen() {
+export default function JobDetailsScreen({ route }) {
+  const JobId = route?.params?.Job_Id;
   const navigation = useNavigation();
+  const focus = useIsFocused();
+  const [mainDetilsData, setMainDetilsData] = useState([]);
 
-  return (
+  const fetchData = async () => {
+    try {
+      const response = await fetch(
+        `https://zingthing.ptechwebs.com/api/job-apply/${JobId}`
+      );
+      const json = await response.json();
+      console.log("object", json.data);
+      setMainDetilsData(json.data[0]);
+    } catch (error) {
+      // setError(error);
+    } finally {
+      // setLoading(false);
+    }
+  };
+
+  useEffect(() => {
+    fetchData();
+  }, [focus]);
+
+  https: return (
     <View style={styles.mainBody}>
-      <OnBordingHeader label={"JOB ID : 1233454 Details"} Back={false} />
+      <OnBordingHeader label={`JOB ID : ${JobId} Details`} Back={false} />
       <ScrollView
         showsVerticalScrollIndicator={false}
         contentContainerStyle={{ paddingBottom: RFValue(50) }}
@@ -29,39 +51,51 @@ export default function JobDetailsScreen() {
       >
         <View>
           <Text style={styles.HeadingText}>Name :</Text>
-          <Text style={styles.BodyText}>John Smith</Text>
+          <Text style={styles.BodyText}>{mainDetilsData.name}</Text>
         </View>
         <View style={{ marginTop: RFValue(8) }}>
           <Text style={styles.HeadingText}>Job Title :</Text>
-          <Text style={styles.BodyText}>Electrician</Text>
+          <Text style={styles.BodyText}>
+            {mainDetilsData.job_posts?.[0].job_title}
+          </Text>
         </View>
         <View style={{ marginTop: RFValue(8) }}>
           <Text style={styles.HeadingText}>City : </Text>
-          <Text style={styles.BodyText}>Rajkot</Text>
+          <Text style={styles.BodyText}>{mainDetilsData.city}</Text>
         </View>
         <View style={{ marginTop: RFValue(8) }}>
           <Text style={styles.HeadingText}>Salary : </Text>
-          <Text style={styles.BodyText}>15,000/-</Text>
+          <Text style={styles.BodyText}>
+            {mainDetilsData.job_posts?.[0].salary_range}
+          </Text>
         </View>
         <View style={{ marginTop: RFValue(8) }}>
           <Text style={styles.HeadingText}>Qualifications :</Text>
-          <Text style={styles.BodyText}>Diploma</Text>
+          <Text style={styles.BodyText}>
+            {mainDetilsData.job_posts?.[0].qualification}
+          </Text>
         </View>
         <View style={{ marginTop: RFValue(8) }}>
           <Text style={styles.HeadingText}>Candiate Type :</Text>
-          <Text style={styles.BodyText}>Local</Text>
+          <Text style={styles.BodyText}>
+            {mainDetilsData.job_posts?.[0].localilty}
+          </Text>
         </View>
         <View style={{ marginTop: RFValue(8) }}>
           <Text style={styles.HeadingText}>Mobile Number :</Text>
-          <Text style={styles.BodyText}>+1 1234567890</Text>
+          <Text style={styles.BodyText}>{mainDetilsData.mobile_no}</Text>
         </View>
         <View style={{ marginTop: RFValue(8) }}>
           <Text style={styles.HeadingText}>Working Hours :</Text>
-          <Text style={styles.BodyText}>Full Time</Text>
+          <Text style={styles.BodyText}>
+            {mainDetilsData.job_posts?.[0].working_time}
+          </Text>
         </View>
         <View style={{ marginTop: RFValue(8) }}>
           <Text style={styles.HeadingText}>Age Group :</Text>
-          <Text style={styles.BodyText}>20 + </Text>
+          <Text style={styles.BodyText}>
+            {mainDetilsData.job_posts?.[0].age_group}
+          </Text>
         </View>
         <View style={{ marginTop: RFValue(8) }}>
           <Text style={styles.HeadingText}>Resume : </Text>

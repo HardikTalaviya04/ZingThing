@@ -7,4 +7,5 @@ export const SCREENS = {
   NewsFeed: "NewsFeed",
   MyJobs: "MyJobs",
   JobDetailsScreen: "JobDetailsScreen",
+  PostJob: "PostJob ",
 };

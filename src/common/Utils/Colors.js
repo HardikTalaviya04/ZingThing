@@ -13,4 +13,5 @@ export const COLORS = {
   SperatorColor: "rgb(224, 224, 224)",
   Gray: "#A2A2A2",
   ThemBlue: "#2D3250",
+  Green: "#00ff00",
 };
