@@ -262,7 +262,7 @@ const PostJob = () => {
                 marginVertical: width * 0.02,
                 borderWidth: 0,
                 elevation: 4,
-                borderRadius: 0,
+                // borderRadius: 0,
                 zIndex: 10,
               }}
               // listItemContainerStyle={{backgroundColor:'red'}}
@@ -291,7 +291,7 @@ const PostJob = () => {
                 marginVertical: width * 0.02,
                 borderWidth: 0,
                 elevation: 4,
-                borderRadius: 0,
+                // borderRadius: 0,
               }}
               // listItemContainerStyle={{backgroundColor:'red'}}
               // // style={{backgroundColor:'red'}}
@@ -319,7 +319,6 @@ const PostJob = () => {
                 marginVertical: width * 0.02,
                 borderWidth: 0,
                 elevation: 4,
-                borderRadius: 0,
               }}
               // listItemContainerStyle={{backgroundColor:'red'}}
               // // style={{backgroundColor:'red'}}
@@ -347,7 +346,6 @@ const PostJob = () => {
                 marginVertical: width * 0.02,
                 borderWidth: 0,
                 elevation: 4,
-                borderRadius: 0,
               }}
               // listItemContainerStyle={{backgroundColor:'red'}}
               // // style={{backgroundColor:'red'}}
@@ -375,7 +373,6 @@ const PostJob = () => {
                 marginVertical: width * 0.02,
                 borderWidth: 0,
                 elevation: 4,
-                borderRadius: 0,
               }}
               // listItemContainerStyle={{backgroundColor:'red'}}
               // // style={{backgroundColor:'red'}}
@@ -404,7 +401,6 @@ const PostJob = () => {
                 marginVertical: width * 0.02,
                 borderWidth: 0,
                 elevation: 4,
-                borderRadius: 0,
               }}
               // listItemContainerStyle={{backgroundColor:'red'}}
               // // style={{backgroundColor:'red'}}
@@ -433,7 +429,6 @@ const PostJob = () => {
                 marginVertical: width * 0.02,
                 borderWidth: 0,
                 elevation: 4,
-                borderRadius: 0,
               }}
               // listItemContainerStyle={{backgroundColor:'red'}}
               // // style={{backgroundColor:'red'}}
@@ -463,7 +458,6 @@ const PostJob = () => {
                 marginVertical: width * 0.02,
                 borderWidth: 0,
                 elevation: 4,
-                borderRadius: 0,
               }}
               // listItemContainerStyle={{backgroundColor:'red'}}
               // // style={{backgroundColor:'red'}}
@@ -493,7 +487,6 @@ const PostJob = () => {
                 marginVertical: width * 0.02,
                 borderWidth: 0,
                 elevation: 4,
-                borderRadius: 0,
               }}
               // listItemContainerStyle={{backgroundColor:'red'}}
               // // style={{backgroundColor:'red'}}
@@ -523,7 +516,6 @@ const PostJob = () => {
                 marginVertical: width * 0.02,
                 borderWidth: 0,
                 elevation: 4,
-                borderRadius: 0,
               }}
               // listItemContainerStyle={{backgroundColor:'red'}}
               // // style={{backgroundColor:'red'}}
@@ -553,7 +545,6 @@ const PostJob = () => {
                 marginVertical: width * 0.02,
                 borderWidth: 0,
                 elevation: 4,
-                borderRadius: 0,
               }}
               // listItemContainerStyle={{backgroundColor:'red'}}
               // // style={{backgroundColor:'red'}}
@@ -583,7 +574,6 @@ const PostJob = () => {
                 marginVertical: width * 0.02,
                 borderWidth: 0,
                 elevation: 4,
-                borderRadius: 0,
               }}
               // listItemContainerStyle={{backgroundColor:'red'}}
               // // style={{backgroundColor:'red'}}
@@ -613,7 +603,6 @@ const PostJob = () => {
                 marginVertical: width * 0.02,
                 borderWidth: 0,
                 elevation: 4,
-                borderRadius: 0,
               }}
               // listItemContainerStyle={{backgroundColor:'red'}}
               // // style={{backgroundColor:'red'}}
@@ -643,7 +632,6 @@ const PostJob = () => {
                 marginVertical: width * 0.02,
                 borderWidth: 0,
                 elevation: 4,
-                borderRadius: 0,
               }}
               // listItemContainerStyle={{backgroundColor:'red'}}
               // // style={{backgroundColor:'red'}}
@@ -673,7 +661,6 @@ const PostJob = () => {
                 marginVertical: width * 0.02,
                 borderWidth: 0,
                 elevation: 4,
-                borderRadius: 0,
               }}
               // listItemContainerStyle={{backgroundColor:'red'}}
               // // style={{backgroundColor:'red'}}
