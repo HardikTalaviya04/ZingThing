@@ -18,6 +18,7 @@ import DropDownPicker from "react-native-dropdown-picker";
 import OnBordingHeader from "../../common/Components/OnBordingHeader";
 import { RFValue } from "react-native-responsive-fontsize";
 import { SCREENS } from "../../common/Utils/screenName";
+import RazorpayCheckout from "react-native-razorpay";
 
 const PostJob = () => {
   const navigation = useNavigation();
@@ -86,6 +87,35 @@ const PostJob = () => {
   const [AdditionalFacilityopen, setAdditionalFacilityOpen] = useState(false);
   const [AdditionalFacilityvalue, setAdditionalFacilityValue] = useState(null);
   const [AdditionalFacilityitems, setAdditionalFacilityItems] = useState([]);
+
+  const [sbscriptionAmount, setSbscriptionAmount] = useState(50);
+
+  const handlePayment = () => {
+    var options = {
+      description: "Credits towards consultation",
+      image: "https://zingthing.in/frontend_theme/assets/images/logo.png",
+      currency: "INR",
+      key: "rzp_test_1Y0isRtUawGbne", // Your api key
+      amount: sbscriptionAmount * 100, // Amount in paise
+      name: "ZingThing",
+      prefill: {
+        email: "example@razorpay.com",
+        contact: "1234567890",
+        name: "Razorpay User",
+      },
+      theme: { color: COLORS.PrimeryColor },
+    };
+    RazorpayCheckout.open(options)
+      .then((data) => {
+        // handle success
+        Alert.alert(`Success: ${data.razorpay_payment_id}`);
+        onSubmit();
+      })
+      .catch((error) => {
+        // handle failure
+        Alert.alert(`Something Wen't Wrong`);
+      });
+  };
 
   const fetchData = async () => {
     try {
@@ -165,6 +195,19 @@ const PostJob = () => {
       setAdditionalFacilityItems(AdditionalFacility);
       // console.log("object", newData)
       // setMainData(json.data);
+    } catch (error) {
+      // setError(error);
+    } finally {
+      // setLoading(false);
+    }
+
+    try {
+      const response = await fetch(
+        "https://zingthing.ptechwebs.com/api/job-post-subscription-list"
+      );
+      const json = await response.json();
+      console.log("HARDIK HARDIK", json.data[0].job_post_rupees);
+      setSbscriptionAmount(json.data[0].job_post_rupees);
     } catch (error) {
       // setError(error);
     } finally {
@@ -670,7 +713,7 @@ const PostJob = () => {
           </View>
 
           <TouchableOpacity
-            onPress={() => onSubmit()}
+            onPress={() => handlePayment()}
             style={{
               backgroundColor: COLORS.Black,
               paddingVertical: height * 0.014,

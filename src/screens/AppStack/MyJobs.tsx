@@ -260,10 +260,10 @@ export default function MyJobs() {
           <Text
             style={[styles.secoendListBoxText, { paddingBottom: RFValue(8) }]}
           >
-            Salary Expected :{" "}
+            Salary Expected :{"₹ "}
             {item.job_posts.salary_range
               ? item.job_posts.salary_range
-              : "10000+"}
+              : "₹ 10000+"}
           </Text>
         </View>
         <TouchableOpacity
@@ -370,7 +370,7 @@ export default function MyJobs() {
                 fontWeight: "bold",
               }}
             >
-              Renew Old Job Post
+              {"    Job Post"}
             </Text>
           </TouchableOpacity>
           <TouchableOpacity
@@ -437,14 +437,12 @@ export default function MyJobs() {
         </View>
         {screenState == 0 ? (
           <FlatList
-            contentContainerStyle={{
-              marginTop: RFValue(15),
-              paddingBottom: RFValue(40),
-            }}
+            contentContainerStyle={{}}
             showsVerticalScrollIndicator={false}
             data={mainDataForFirst}
             renderItem={renderItemForFirst}
             ListEmptyComponent={EmptyComponent}
+            inverted={true}
           />
         ) : (
           <>
