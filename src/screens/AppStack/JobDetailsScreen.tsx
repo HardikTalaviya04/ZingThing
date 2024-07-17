@@ -11,6 +11,7 @@ import OnBordingHeader from "../../common/Components/OnBordingHeader";
 import { RFValue } from "react-native-responsive-fontsize";
 import { useIsFocused, useNavigation } from "@react-navigation/native";
 import { SCREENS } from "../../common/Utils/screenName";
+import { FONTS } from "../../common/Utils/fonts";
 
 export default function JobDetailsScreen({ route }) {
   const JobId = route?.params?.Job_Id;
@@ -140,10 +141,12 @@ const styles = StyleSheet.create({
   HeadingText: {
     fontSize: RFValue(16),
     color: COLORS.TextBlack,
+    fontFamily:FONTS.Regular
   },
   BodyText: {
-    fontSize: RFValue(20),
+    fontSize: RFValue(16),
+    fontFamily:FONTS.SemiBold,
     color: COLORS.Black,
-    fontWeight: "bold",
+    // fontWeight: "bold",
   },
 });
