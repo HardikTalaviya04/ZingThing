@@ -12,6 +12,7 @@ import { RFValue } from "react-native-responsive-fontsize";
 import { useIsFocused, useNavigation } from "@react-navigation/native";
 import { SCREENS } from "../../common/Utils/screenName";
 import { FONTS } from "../../common/Utils/fonts";
+import DownloadFile from "../../common/Components/DownloadFile";
 
 export default function JobDetailsScreen({ route }) {
   const JobId = route?.params?.Job_Id;
@@ -101,6 +102,7 @@ export default function JobDetailsScreen({ route }) {
         <View style={{ marginTop: RFValue(8) }}>
           <Text style={styles.HeadingText}>Resume : </Text>
           <TouchableOpacity
+            onPress={() => DownloadFile({ FileUrl: mainDetilsData.resume })}
             activeOpacity={0.5}
             style={{
               backgroundColor: COLORS.Black,
@@ -124,10 +126,7 @@ export default function JobDetailsScreen({ route }) {
         </View>
         <View style={{ marginTop: RFValue(8) }}>
           <Text style={styles.HeadingText}>Candidate Message:</Text>
-          <Text style={styles.BodyText}>
-            Lorem Ipsum is simply dummy text of the printing and typesetting
-            industry
-          </Text>
+          <Text style={styles.BodyText}>{mainDetilsData.message}</Text>
         </View>
       </ScrollView>
     </View>
@@ -141,11 +140,11 @@ const styles = StyleSheet.create({
   HeadingText: {
     fontSize: RFValue(16),
     color: COLORS.TextBlack,
-    fontFamily:FONTS.Regular
+    fontFamily: FONTS.Regular,
   },
   BodyText: {
     fontSize: RFValue(16),
-    fontFamily:FONTS.SemiBold,
+    fontFamily: FONTS.SemiBold,
     color: COLORS.Black,
     // fontWeight: "bold",
   },
