@@ -3,6 +3,8 @@ import {
   Dimensions,
   FlatList,
   ImageBackground,
+  Platform,
+  Settings,
   StyleSheet,
   Text,
   Touchable,
@@ -19,6 +21,10 @@ import { FONTS } from "../../common/Utils/fonts";
 import DocumentPicker from "react-native-document-picker";
 import RNFS from "react-native-fs";
 import DownloadFile from "../../common/Components/DownloadFile";
+import RazorpayCheckout from "react-native-razorpay";
+import RNFetchBlob from "rn-fetch-blob";
+import { check, request, PERMISSIONS, RESULTS } from "react-native-permissions";
+import { Linking } from "react-native";
 
 export default function NewsFeed() {
   const [screenState, setscreenState] = useState(0);
@@ -27,6 +33,92 @@ export default function NewsFeed() {
   const [mainData, setMainData] = useState([]);
   const ScreenHeight = Dimensions.get("screen").height;
   const ScreenWidth = Dimensions.get("screen").width;
+
+  const handlePayment = () => {
+    var options = {
+      description: "Credits towards consultation",
+      image: "https://zingthing.in/frontend_theme/assets/images/logo.png",
+      currency: "INR",
+      key: "rzp_test_1Y0isRtUawGbne", // Your api key
+      amount: 100, // Amount in paise
+      name: "ZingThing",
+      prefill: {
+        email: "example@razorpay.com",
+        contact: "1234567890",
+        name: "Razorpay User",
+      },
+      theme: { color: COLORS.PrimeryColor },
+    };
+    RazorpayCheckout.open(options)
+      .then((data) => {
+        // handle success
+        Alert.alert(`Success: ${data.razorpay_payment_id}`);
+        pickDocument();
+      })
+      .catch((error) => {
+        // handle failure
+        Alert.alert(`Something Wen't Wrong`);
+      });
+  };
+
+  const requestStoragePermission = async () => {
+    if (Platform.OS === "android") {
+      const status = await check();
+      console.log(status);
+      if (status === RESULTS.GRANTED) {
+        return true;
+      }
+
+      const result = await request(PERMISSIONS.ANDROID.WRITE_EXTERNAL_STORAGE);
+      console.log(result);
+      if (result === RESULTS.GRANTED) {
+        return true;
+      }
+
+      Alert.alert(
+        "Permission Required",
+        "Storage permission is required to download files. Please grant the permission in the app settings.",
+        [
+          { text: "Cancel", style: "cancel" },
+          { text: "Open Settings", onPress: () => Linking.openSettings() },
+        ]
+      );
+      return false;
+    }
+    return true; // iOS doesn't require explicit storage permission for downloads.
+  };
+  const DownloadFileFunction = async ({ FileUrl }) => {
+    if (Platform.OS === "android") {
+      const granted = await requestStoragePermission();
+      if (!granted) {
+        return;
+      }
+    }
+
+    // setIsDownloading(true);
+
+    const { config, fs } = RNFetchBlob;
+    const downloads = fs.dirs.DownloadDir;
+    const fileName = "sample.pdf";
+
+    config({
+      addAndroidDownloads: {
+        useDownloadManager: true,
+        notification: true,
+        path: `${downloads}/${fileName}`,
+        description: "Downloading PDF file",
+      },
+    })
+      .fetch("GET", FileUrl)
+      .then((res) => {
+        Alert.alert("Download Success", "PDF file downloaded successfully.");
+        // setIsDownloading(false);
+      })
+      .catch((errorMessage, statusCode) => {
+        Alert.alert("Download Failed", "Failed to download PDF file.");
+        // setIsDownloading(false);
+      });
+  };
 
   const pickDocument = async () => {
     try {
@@ -174,7 +266,7 @@ export default function NewsFeed() {
           News Feed Expires : {item.expire_date}
         </Text>
         <TouchableOpacity
-          onPress={() => DownloadFile({ FileUrl: item.document })}
+          onPress={() => DownloadFileFunction({ FileUrl: item.document })}
           activeOpacity={0.7}
           style={{
             backgroundColor: COLORS.Black,
@@ -194,7 +286,7 @@ export default function NewsFeed() {
           }}
         >
           <Text style={{ color: "#F58D3A", fontWeight: "bold" }}>
-            Total View : {item.user ? 1 : 0}
+            Total View : {item?.total_views}
           </Text>
         </View>
       </View>
@@ -313,7 +405,7 @@ export default function NewsFeed() {
             }}
           >
             <TouchableOpacity
-              onPress={() => pickDocument()}
+              onPress={() => handlePayment()}
               activeOpacity={0.7}
               style={{
                 backgroundColor: COLORS.Black,
