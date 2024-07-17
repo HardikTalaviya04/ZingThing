@@ -39,9 +39,8 @@ export default function MyJobs() {
         "https://zingthing.ptechwebs.com/api/jobpost-list/1"
       );
       const json = await response.json();
-      const reversedData = [...json.data].reverse();
-      setMainDataForFirst(reversedData);
-      console.log("reversedData", reversedData);
+      console.log("object", json.data);
+      setMainDataForFirst(json.data);
     } catch (error) {
       // setError(error);
     } finally {
@@ -53,7 +52,7 @@ export default function MyJobs() {
         "https://zingthing.ptechwebs.com/api/available-candiates-list/1"
       );
       const json = await response.json();
-
+      console.log("object", json.data);
       setMainDataForSecoend(json.data);
     } catch (error) {
       // setError(error);
@@ -128,11 +127,11 @@ export default function MyJobs() {
               color: COLORS.Parpul,
               fontSize: RFValue(15),
               fontWeight: "800",
-              width: ScreenWidth * 0.35,
+              width: ScreenWidth * 0.45,
               marginLeft: RFValue(10),
             }}
           >
-            {item.localilty}
+            {"Local Jobs \nOne Time Job"}
           </Text>
         </View>
         <View style={styles.Sprator} />
@@ -256,7 +255,7 @@ export default function MyJobs() {
           </Text>
           <Text style={styles.secoendListBoxText}>Location : {item.city}</Text>
           <Text style={styles.secoendListBoxText}>
-            Experience : {(item?.job_posts?.experience).toLowerCase()} of Exp
+            Experience : {item.job_posts.experience.toLowerCase()} of Exp
           </Text>
           <Text
             style={[styles.secoendListBoxText, { paddingBottom: RFValue(8) }]}
@@ -443,6 +442,7 @@ export default function MyJobs() {
             data={mainDataForFirst}
             renderItem={renderItemForFirst}
             ListEmptyComponent={EmptyComponent}
+            inverted={true}
           />
         ) : (
           <>

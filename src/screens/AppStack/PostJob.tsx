@@ -28,8 +28,8 @@ const PostJob = () => {
   const [open, setOpen] = useState(false);
   const [value, setValue] = useState(null);
   const [items, setItems] = useState([
-    { label: "Single Job/Service", value: "1" },
-    { label: "Employment", value: "2" },
+    { label: "On Site", value: "1" },
+    { label: "Remote", value: "2" },
   ]);
 
   const [JobTitleopen, setJobTitleOpen] = useState(false);
@@ -90,70 +90,6 @@ const PostJob = () => {
 
   const [sbscriptionAmount, setSbscriptionAmount] = useState(50);
 
-  const CheckValidation = () => {
-    console.log("AdditionalFacilityvalue", AdditionalFacilityvalue);
-    if (value == null) {
-      Alert.alert("Please Select Job Type");
-      return;
-    }
-    if (JobTitlevalue == null) {
-      Alert.alert("Please Select Job Title");
-      return;
-    }
-    if (BusinnesTypevalue == null) {
-      Alert.alert("Please Select Business Type");
-      return;
-    }
-    if (WorkingTimevalue == null) {
-      Alert.alert("Please Select Working Time");
-      return;
-    }
-    if (GenderListvalue == null) {
-      Alert.alert("Please Select Gender List");
-      return;
-    }
-    if (EducationLinevalue == null) {
-      Alert.alert("Please Select Education Line");
-      return;
-    }
-    if (Qualificationvalue == null) {
-      Alert.alert("Please Select Qualification");
-      return;
-    }
-    if (AddSkillsvalue == null) {
-      Alert.alert("Please Select Add Skills");
-      return;
-    }
-    if (WorkExperiencevalue == null) {
-      Alert.alert("Please Select Work Experience");
-      return;
-    }
-    if (Vaccanciesvalue == null) {
-      Alert.alert("Please Select Vaccancies");
-      return;
-    }
-    if (AgeListvalue == null) {
-      Alert.alert("Please Select Age List");
-      return;
-    }
-    if (WorkPlacevalue == null) {
-      Alert.alert("Please Select Work Place");
-      return;
-    }
-    if (SalaryRangevalue == null) {
-      Alert.alert("Please Select Salary Range");
-      return;
-    }
-    if (Localityvalue == null) {
-      Alert.alert("Please Select Locality");
-      return;
-    }
-    if (AdditionalFacilityvalue == null) {
-      Alert.alert("Please Select Additional Facility");
-      return;
-    }
-    handlePayment();
-  };
   const handlePayment = () => {
     var options = {
       description: "Credits towards consultation",
@@ -411,7 +347,6 @@ const PostJob = () => {
               Business Type :
             </Text>
             <DropDownPicker
-              multiple={true}
               open={BusinnesTypeopen}
               placeholder="Select Business Type ( Max 5)"
               placeholderStyle={{
@@ -468,7 +403,6 @@ const PostJob = () => {
               Gender :
             </Text>
             <DropDownPicker
-              multiple={true}
               open={GenderListopen}
               value={GenderListvalue}
               items={GenderListitems}
@@ -497,7 +431,6 @@ const PostJob = () => {
               Line of Education :
             </Text>
             <DropDownPicker
-              multiple={true}
               open={EducationLineopen}
               value={EducationLinevalue}
               dropDownDirection="BOTTOM"
@@ -557,7 +490,6 @@ const PostJob = () => {
               Additional Skills :
             </Text>
             <DropDownPicker
-              multiple={true}
               open={AddSkillsopen}
               value={AddSkillsvalue}
               items={AddSkillsitems}
@@ -768,7 +700,6 @@ const PostJob = () => {
               Additional Facilities :
             </Text>
             <DropDownPicker
-              multiple={true}
               open={AdditionalFacilityopen}
               value={AdditionalFacilityvalue}
               items={AdditionalFacilityitems}
@@ -795,7 +726,7 @@ const PostJob = () => {
           </View>
 
           <TouchableOpacity
-            onPress={() => CheckValidation()}
+            onPress={() => handlePayment()}
             style={{
               backgroundColor: COLORS.Black,
               paddingVertical: height * 0.014,
@@ -811,7 +742,7 @@ const PostJob = () => {
                 fontWeight: "600",
               }}
             >
-              Pay & Submit Job Post
+              Submit Job Post
             </Text>
           </TouchableOpacity>
         </View>
