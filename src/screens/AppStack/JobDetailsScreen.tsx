@@ -66,7 +66,7 @@ export default function JobDetailsScreen({ route }) {
         <View style={{ marginTop: RFValue(8) }}>
           <Text style={styles.HeadingText}>Salary : </Text>
           <Text style={styles.BodyText}>
-            {mainDetilsData.job_posts?.[0].salary_range}
+            ₹ {mainDetilsData.job_posts?.[0].salary_range}
           </Text>
         </View>
         <View style={{ marginTop: RFValue(8) }}>
