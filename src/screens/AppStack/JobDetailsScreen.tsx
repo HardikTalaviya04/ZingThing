@@ -143,7 +143,7 @@ const styles = StyleSheet.create({
     fontFamily: FONTS.Regular,
   },
   BodyText: {
-    fontSize: RFValue(16),
+    fontSize: RFValue(14),
     fontFamily: FONTS.SemiBold,
     color: COLORS.Black,
     // fontWeight: "bold",

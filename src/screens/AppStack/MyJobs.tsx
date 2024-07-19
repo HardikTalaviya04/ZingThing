@@ -222,7 +222,7 @@ export default function MyJobs() {
             }}
           >
             {/* Hiring a account manager with 2+ yrs exp */}
-            {`Hiring a ${item.job_title.toLowerCase()} with ${
+            {`Hiring a ${item?.job_title?.toLowerCase()} with ${
               item.experience
             } of exp`}
           </Text>

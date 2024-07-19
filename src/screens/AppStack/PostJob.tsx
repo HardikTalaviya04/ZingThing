@@ -3,6 +3,7 @@ import {
   Dimensions,
   StyleSheet,
   Text,
+  TextInput,
   TouchableOpacity,
   View,
 } from "react-native";
@@ -87,6 +88,8 @@ const PostJob = () => {
   const [AdditionalFacilityopen, setAdditionalFacilityOpen] = useState(false);
   const [AdditionalFacilityvalue, setAdditionalFacilityValue] = useState(null);
   const [AdditionalFacilityitems, setAdditionalFacilityItems] = useState([]);
+
+  const [CandidateMessagevalue, setCandidateMessagevalue] = useState("");
 
   const [sbscriptionAmount, setSbscriptionAmount] = useState(50);
 
@@ -328,480 +331,503 @@ const PostJob = () => {
       Alert.alert(err);
     }
   };
+  const setDropdownOpenFunction = (index) => {
+    setOpen(index == 0 ? !open : false);
+    setJobTitleOpen(index == 1 ? !JobTitleopen : false);
+    setBusinnesTypeOpen(index == 2 ? !BusinnesTypeopen : false);
+    setWorkingTimeOpen(index == 3 ? !WorkingTimeopen : false);
+    setGenderListOpen(index == 4 ? !GenderListopen : false);
+    setEducationLineOpen(index == 5 ? !EducationLineopen : false);
+    setQualificationOpen(index == 6 ? !Qualificationopen : false);
+    setAddSkillsOpen(index == 7 ? !AdditionalFacilityopen : false);
+    setWorkExperienceOpen(index == 8 ? !WorkExperienceopen : false);
+    setVaccanciesOpen(index == 9 ? !Vaccanciesopen : false);
+    setAgeListOpen(index == 10 ? !AgeListopen : false);
+    setWorkPlaceOpen(index == 11 ? !WorkPlaceopen : false);
+    setSalaryRangeOpen(index == 12 ? !SalaryRangeopen : false);
+    setLocalityOpen(index == 13 ? !Localityopen : false);
+    setAdditionalFacilityOpen(index == 14 ? !AdditionalFacilityopen : false);
+  };
 
   return (
-    <View style={{ flex: 1, backgroundColor: "#EFFDFD" }}>
+    <View
+      style={{
+        flex: 1,
+        backgroundColor: "#EFFDFD",
+        justifyContent: "center",
+      }}
+    >
       <OnBordingHeader label={"Post Job"} Back={false} />
-      <ScrollView contentContainerStyle={{ paddingBottom: RFValue(40) }}>
-        <View
+      <ScrollView
+        nestedScrollEnabled={true}
+        showsVerticalScrollIndicator={false}
+        // keyboardShouldPersistTaps="handled"
+        contentContainerStyle={{
+          flexGrow: 1,
+          paddingBottom: RFValue(40),
+          backgroundColor: COLORS.White,
+          paddingVertical: width * 0.034,
+          marginVertical: width * 0.04,
+          marginHorizontal: RFValue(12),
+          paddingHorizontal: width * 0.04,
+          borderRadius: 4,
+        }}
+      >
+        <Text
           style={{
-            backgroundColor: COLORS.White,
-            width: width * 0.92,
-            alignSelf: "center",
-            paddingVertical: width * 0.034,
-            marginVertical: width * 0.04,
-            paddingHorizontal: width * 0.04,
-            flex: 1,
+            color: COLORS.TextBlack,
+            fontWeight: "600",
           }}
         >
-          <View
+          Job Type * :{" "}
+        </Text>
+        <DropDownPicker
+          listMode="SCROLLVIEW"
+          scrollViewProps={{ nestedScrollEnabled: true }}
+          open={open}
+          value={value}
+          placeholder="Select Job Type"
+          placeholderStyle={{
+            color: COLORS.SperatorColor,
+            fontWeight: "500",
+          }}
+          items={items}
+          dropDownDirection="BOTTOM"
+          setOpen={() => setDropdownOpenFunction(0)}
+          setValue={setValue}
+          listItemLabelStyle={{
+            color: COLORS.Black,
+            backgroundColor: COLORS.White,
+          }}
+          style={{
+            marginVertical: width * 0.02,
+            borderWidth: 0,
+            elevation: 4,
+            zIndex: 1000,
+          }}
+          dropDownContainerStyle={styles.dropDownContainerStyle}
+          setItems={setItems}
+        />
+        <Text style={{ color: COLORS.TextBlack, fontWeight: "600" }}>
+          Job Title :
+        </Text>
+        <DropDownPicker
+          open={JobTitleopen}
+          listMode="SCROLLVIEW"
+          scrollViewProps={{ nestedScrollEnabled: true }}
+          placeholder="Select Job Title"
+          placeholderStyle={{
+            color: COLORS.SperatorColor,
+            fontWeight: "500",
+          }}
+          value={JobTitlevalue}
+          items={JobTitleitems}
+          setOpen={() => setDropdownOpenFunction(1)}
+          setValue={setJobTitleValue}
+          listItemLabelStyle={{
+            color: COLORS.Black,
+            backgroundColor: COLORS.White,
+          }}
+          style={{
+            marginVertical: width * 0.02,
+            borderWidth: 0,
+            elevation: 4,
+            zIndex: 999,
+          }}
+          dropDownContainerStyle={styles.dropDownContainerStyle}
+          setItems={setItems}
+        />
+        <Text style={{ color: COLORS.TextBlack, fontWeight: "600" }}>
+          Business Type :
+        </Text>
+        <DropDownPicker
+          multiple={true}
+          listMode="SCROLLVIEW"
+          scrollViewProps={{ nestedScrollEnabled: true }}
+          open={BusinnesTypeopen}
+          placeholder="Select Business Type ( Max 5)"
+          placeholderStyle={{
+            color: COLORS.SperatorColor,
+            fontWeight: "500",
+          }}
+          value={BusinnesTypevalue}
+          items={BusinnesTypeitems}
+          setOpen={() => setDropdownOpenFunction(2)}
+          setValue={setBusinnesTypeValue}
+          listItemLabelStyle={{ color: COLORS.Black }}
+          style={{
+            marginVertical: width * 0.02,
+            borderWidth: 0,
+            elevation: 4,
+            zIndex: 998,
+          }}
+          dropDownContainerStyle={styles.dropDownContainerStyle}
+          setItems={setItems}
+        />
+        <Text style={{ color: COLORS.TextBlack, fontWeight: "600" }}>
+          Job Time/Working Time :
+        </Text>
+        <DropDownPicker
+          listMode="SCROLLVIEW"
+          scrollViewProps={{ nestedScrollEnabled: true }}
+          open={WorkingTimeopen}
+          value={WorkingTimevalue}
+          placeholder="Select Time ( Multiple)"
+          placeholderStyle={{
+            color: COLORS.SperatorColor,
+            fontWeight: "500",
+          }}
+          items={WorkingTimeitems}
+          setOpen={() => setDropdownOpenFunction(3)}
+          setValue={setWorkingTimeValue}
+          listItemLabelStyle={{ color: COLORS.Black }}
+          style={{
+            marginVertical: width * 0.02,
+            borderWidth: 0,
+            elevation: 4,
+            zIndex: 997,
+          }}
+          dropDownContainerStyle={styles.dropDownContainerStyle}
+          setItems={setItems}
+        />
+        <Text style={{ color: COLORS.TextBlack, fontWeight: "600" }}>
+          Gender :
+        </Text>
+        <DropDownPicker
+          multiple={true}
+          listMode="SCROLLVIEW"
+          scrollViewProps={{ nestedScrollEnabled: true }}
+          open={GenderListopen}
+          value={GenderListvalue}
+          items={GenderListitems}
+          setOpen={() => setDropdownOpenFunction(4)}
+          placeholder="Select Gender"
+          placeholderStyle={{
+            color: COLORS.SperatorColor,
+            fontWeight: "500",
+          }}
+          setValue={setGenderListValue}
+          listItemLabelStyle={{ color: COLORS.Black }}
+          style={{
+            marginVertical: width * 0.02,
+            borderWidth: 0,
+            elevation: 4,
+            zIndex: 996,
+          }}
+          dropDownContainerStyle={styles.dropDownContainerStyle}
+          setItems={setItems}
+        />
+        <Text style={{ color: COLORS.TextBlack, fontWeight: "600" }}>
+          Line of Education :
+        </Text>
+        <DropDownPicker
+          multiple={true}
+          listMode="SCROLLVIEW"
+          scrollViewProps={{ nestedScrollEnabled: true }}
+          open={EducationLineopen}
+          value={EducationLinevalue}
+          dropDownDirection="BOTTOM"
+          placeholder="Select Education ( Max 3)"
+          placeholderStyle={{
+            color: COLORS.SperatorColor,
+            fontWeight: "500",
+          }}
+          items={EducationLineitems}
+          setOpen={() => setDropdownOpenFunction(5)}
+          setValue={setEducationLineValue}
+          listItemLabelStyle={{ color: COLORS.Black }}
+          style={{
+            marginVertical: width * 0.02,
+            borderWidth: 0,
+            elevation: 4,
+            zIndex: 995,
+          }}
+          dropDownContainerStyle={styles.dropDownContainerStyle}
+        />
+        <Text style={{ color: COLORS.TextBlack, fontWeight: "600" }}>
+          Qualification :
+        </Text>
+        <DropDownPicker
+          listMode="SCROLLVIEW"
+          scrollViewProps={{ nestedScrollEnabled: true }}
+          open={Qualificationopen}
+          value={Qualificationvalue}
+          items={Qualificationitems}
+          dropDownDirection="BOTTOM"
+          placeholder="Select Qualification"
+          placeholderStyle={{
+            color: COLORS.SperatorColor,
+            fontWeight: "500",
+          }}
+          setOpen={() => setDropdownOpenFunction(6)}
+          setValue={setQualificationValue}
+          listItemLabelStyle={{ color: COLORS.Black }}
+          style={{
+            marginVertical: width * 0.02,
+            borderWidth: 0,
+            elevation: 4,
+            zIndex: 994,
+          }}
+          dropDownContainerStyle={styles.dropDownContainerStyle}
+          setItems={setItems}
+        />
+        <Text style={{ color: COLORS.TextBlack, fontWeight: "600" }}>
+          Additional Skills :
+        </Text>
+        <DropDownPicker
+          multiple={true}
+          listMode="SCROLLVIEW"
+          scrollViewProps={{ nestedScrollEnabled: true }}
+          open={AddSkillsopen}
+          value={AddSkillsvalue}
+          items={AddSkillsitems}
+          dropDownDirection="BOTTOM"
+          placeholder="Select Skills ( Max 3)"
+          placeholderStyle={{
+            color: COLORS.SperatorColor,
+            fontWeight: "500",
+          }}
+          setOpen={() => setDropdownOpenFunction(7)}
+          setValue={setAddSkillsValue}
+          listItemLabelStyle={{ color: COLORS.Black }}
+          style={{
+            marginVertical: width * 0.02,
+            borderWidth: 0,
+            elevation: 4,
+            zIndex: 993,
+          }}
+          dropDownContainerStyle={styles.dropDownContainerStyle}
+          setItems={setItems}
+        />
+        <Text style={{ color: COLORS.TextBlack, fontWeight: "600" }}>
+          Work Experience Years :
+        </Text>
+        <DropDownPicker
+          listMode="SCROLLVIEW"
+          scrollViewProps={{ nestedScrollEnabled: true }}
+          open={WorkExperienceopen}
+          value={WorkExperiencevalue}
+          items={WorkExperienceitems}
+          dropDownDirection="BOTTOM"
+          placeholder="Select Experience"
+          placeholderStyle={{
+            color: COLORS.SperatorColor,
+            fontWeight: "500",
+          }}
+          setOpen={() => setDropdownOpenFunction(8)}
+          setValue={setWorkExperienceValue}
+          listItemLabelStyle={{ color: COLORS.Black }}
+          style={{
+            marginVertical: width * 0.02,
+            borderWidth: 0,
+            elevation: 4,
+            zIndex: 992,
+          }}
+          dropDownContainerStyle={styles.dropDownContainerStyle}
+        />
+        <Text style={{ color: COLORS.TextBlack, fontWeight: "600" }}>
+          NO. of Vacancies :
+        </Text>
+        <DropDownPicker
+          listMode="SCROLLVIEW"
+          scrollViewProps={{ nestedScrollEnabled: true }}
+          open={Vaccanciesopen}
+          value={Vaccanciesvalue}
+          items={Vaccanciesitems}
+          dropDownDirection="BOTTOM"
+          placeholder="10"
+          placeholderStyle={{
+            color: COLORS.SperatorColor,
+            fontWeight: "500",
+          }}
+          setOpen={() => setDropdownOpenFunction(9)}
+          setValue={setVaccanciesValue}
+          listItemLabelStyle={{ color: COLORS.Black }}
+          style={{
+            marginVertical: width * 0.02,
+            borderWidth: 0,
+            elevation: 4,
+            zIndex: 991,
+          }}
+          dropDownContainerStyle={styles.dropDownContainerStyle}
+          setItems={setItems}
+        />
+        <Text style={{ color: COLORS.TextBlack, fontWeight: "600" }}>
+          Age Group :
+        </Text>
+        <DropDownPicker
+          listMode="SCROLLVIEW"
+          scrollViewProps={{ nestedScrollEnabled: true }}
+          open={AgeListopen}
+          value={AgeListvalue}
+          items={AgeListitems}
+          dropDownDirection="BOTTOM"
+          placeholder="Select Age Group"
+          placeholderStyle={{
+            color: COLORS.SperatorColor,
+            fontWeight: "500",
+          }}
+          setOpen={() => setDropdownOpenFunction(10)}
+          setValue={setAgeListValue}
+          listItemLabelStyle={{ color: COLORS.Black }}
+          style={{
+            marginVertical: width * 0.02,
+            borderWidth: 0,
+            elevation: 4,
+            zIndex: 990,
+          }}
+          dropDownContainerStyle={styles.dropDownContainerStyle}
+          setItems={setItems}
+        />
+        <Text style={{ color: COLORS.TextBlack, fontWeight: "600" }}>
+          Work Place :
+        </Text>
+        <DropDownPicker
+          listMode="SCROLLVIEW"
+          scrollViewProps={{ nestedScrollEnabled: true }}
+          open={WorkPlaceopen}
+          value={WorkPlacevalue}
+          items={WorkPlaceitems}
+          dropDownDirection="BOTTOM"
+          placeholder="Select Work Place"
+          placeholderStyle={{
+            color: COLORS.SperatorColor,
+            fontWeight: "500",
+          }}
+          setOpen={() => setDropdownOpenFunction(11)}
+          setValue={setWorkPlaceValue}
+          listItemLabelStyle={{ color: COLORS.Black }}
+          style={{
+            marginVertical: width * 0.02,
+            borderWidth: 0,
+            elevation: 4,
+            zIndex: 989,
+          }}
+          dropDownContainerStyle={styles.dropDownContainerStyle}
+          setItems={setItems}
+        />
+        <Text style={{ color: COLORS.TextBlack, fontWeight: "600" }}>
+          Salary Range :
+        </Text>
+        <DropDownPicker
+          listMode="SCROLLVIEW"
+          scrollViewProps={{ nestedScrollEnabled: true }}
+          open={SalaryRangeopen}
+          value={SalaryRangevalue}
+          items={SalaryRangeitems}
+          dropDownDirection="BOTTOM"
+          placeholder="Select Range"
+          placeholderStyle={{
+            color: COLORS.SperatorColor,
+            fontWeight: "500",
+          }}
+          setOpen={() => setDropdownOpenFunction(12)}
+          setValue={setSalaryRangeValue}
+          listItemLabelStyle={{ color: COLORS.Black }}
+          style={{
+            marginVertical: width * 0.02,
+            borderWidth: 0,
+            elevation: 4,
+            zIndex: 988,
+          }}
+          dropDownContainerStyle={styles.dropDownContainerStyle}
+          setItems={setItems}
+        />
+        <Text style={{ color: COLORS.TextBlack, fontWeight: "600" }}>
+          Locality :
+        </Text>
+        <DropDownPicker
+          listMode="SCROLLVIEW"
+          scrollViewProps={{ nestedScrollEnabled: true }}
+          open={Localityopen}
+          value={Localityvalue}
+          items={Localityitems}
+          dropDownDirection="BOTTOM"
+          placeholder="Select Locality"
+          placeholderStyle={{
+            color: COLORS.SperatorColor,
+            fontWeight: "500",
+          }}
+          setOpen={() => setDropdownOpenFunction(13)}
+          setValue={setLocalityValue}
+          listItemLabelStyle={{ color: COLORS.Black }}
+          style={{
+            marginVertical: width * 0.02,
+            borderWidth: 0,
+            elevation: 4,
+            zIndex: 987,
+          }}
+          dropDownContainerStyle={styles.dropDownContainerStyle}
+          setItems={setItems}
+        />
+        <Text style={{ color: COLORS.TextBlack, fontWeight: "600" }}>
+          Additional Facilities :
+        </Text>
+        <DropDownPicker
+          listMode="SCROLLVIEW"
+          scrollViewProps={{ nestedScrollEnabled: true }}
+          multiple={true}
+          open={AdditionalFacilityopen}
+          value={AdditionalFacilityvalue}
+          items={AdditionalFacilityitems}
+          dropDownDirection="BOTTOM"
+          placeholder="Select Additional Facilites (Multiple Allowed)"
+          placeholderStyle={{
+            color: COLORS.SperatorColor,
+            fontWeight: "500",
+          }}
+          setOpen={() => setDropdownOpenFunction(14)}
+          setValue={setAdditionalFacilityValue}
+          listItemLabelStyle={{ color: COLORS.Black }}
+          style={{
+            marginVertical: width * 0.02,
+            borderWidth: 0,
+            elevation: 4,
+            zIndex: 986,
+          }}
+          dropDownContainerStyle={styles.dropDownContainerStyle}
+          setItems={setItems}
+        />
+        <Text style={{ color: COLORS.TextBlack, fontWeight: "600" }}>
+          Candidate Message :
+        </Text>
+        <TextInput
+          value={CandidateMessagevalue}
+          onChange={(text) => setCandidateMessagevalue(text)}
+          placeholderTextColor={COLORS.SperatorColor}
+          style={{
+            width: "100%",
+            marginVertical: width * 0.02,
+            borderWidth: 1,
+            borderColor: COLORS.SperatorColor,
+            borderRadius: 8,
+            zIndex: 985,
+            padding: RFValue(8),
+            color: COLORS.Black,
+          }}
+          placeholder="Enter Candidate Message"
+        />
+
+        <TouchableOpacity
+          onPress={() => CheckValidation()}
+          style={{
+            backgroundColor: COLORS.Black,
+            paddingVertical: height * 0.014,
+            borderRadius: width * 0.02,
+            marginTop: 20,
+            zIndex: -1,
+          }}
+        >
+          <Text
             style={{
-              zIndex: 14,
+              color: COLORS.White,
+              textAlign: "center",
+              fontWeight: "600",
             }}
           >
-            <Text style={{ color: COLORS.TextBlack, fontWeight: "600" }}>
-              Job Type * :{" "}
-            </Text>
-            <DropDownPicker
-              open={open}
-              value={value}
-              placeholder="Select Job Type"
-              placeholderStyle={{
-                color: COLORS.SperatorColor,
-                fontWeight: "500",
-              }}
-              items={items}
-              dropDownDirection="BOTTOM"
-              setOpen={setOpen}
-              setValue={setValue}
-              listItemLabelStyle={{ color: COLORS.Black }}
-              style={{
-                marginVertical: width * 0.02,
-                borderWidth: 0,
-                elevation: 4,
-                // borderRadius: 0,
-                zIndex: 10,
-              }}
-              // listItemContainerStyle={{backgroundColor:'red'}}
-              // // style={{backgroundColor:'red'}}
-              // dropDownContainerStyle={{backgroundColor:'red'}}
-              setItems={setItems}
-            />
-          </View>
-          <View style={{ zIndex: 13 }}>
-            <Text style={{ color: COLORS.TextBlack, fontWeight: "600" }}>
-              Job Title :
-            </Text>
-            <DropDownPicker
-              open={JobTitleopen}
-              placeholder="Select Job Title"
-              placeholderStyle={{
-                color: COLORS.SperatorColor,
-                fontWeight: "500",
-              }}
-              value={JobTitlevalue}
-              items={JobTitleitems}
-              setOpen={setJobTitleOpen}
-              setValue={setJobTitleValue}
-              listItemLabelStyle={{ color: COLORS.Black }}
-              style={{
-                marginVertical: width * 0.02,
-                borderWidth: 0,
-                elevation: 4,
-                // borderRadius: 0,
-              }}
-              // listItemContainerStyle={{backgroundColor:'red'}}
-              // // style={{backgroundColor:'red'}}
-              // dropDownContainerStyle={{backgroundColor:'red'}}
-              setItems={setItems}
-            />
-          </View>
-          <View style={{ zIndex: 12 }}>
-            <Text style={{ color: COLORS.TextBlack, fontWeight: "600" }}>
-              Business Type :
-            </Text>
-            <DropDownPicker
-              multiple={true}
-              open={BusinnesTypeopen}
-              placeholder="Select Business Type ( Max 5)"
-              placeholderStyle={{
-                color: COLORS.SperatorColor,
-                fontWeight: "500",
-              }}
-              value={BusinnesTypevalue}
-              items={BusinnesTypeitems}
-              setOpen={setBusinnesTypeOpen}
-              setValue={setBusinnesTypeValue}
-              listItemLabelStyle={{ color: COLORS.Black }}
-              style={{
-                marginVertical: width * 0.02,
-                borderWidth: 0,
-                elevation: 4,
-              }}
-              // listItemContainerStyle={{backgroundColor:'red'}}
-              // // style={{backgroundColor:'red'}}
-              // dropDownContainerStyle={{backgroundColor:'red'}}
-              setItems={setItems}
-            />
-          </View>
-          <View style={{ zIndex: 11 }}>
-            <Text style={{ color: COLORS.TextBlack, fontWeight: "600" }}>
-              Job Time/Working Time :
-            </Text>
-            <DropDownPicker
-              open={WorkingTimeopen}
-              value={WorkingTimevalue}
-              placeholder="Select Time ( Multiple)"
-              placeholderStyle={{
-                color: COLORS.SperatorColor,
-                fontWeight: "500",
-              }}
-              items={WorkingTimeitems}
-              setOpen={setWorkingTimeOpen}
-              setValue={setWorkingTimeValue}
-              listItemLabelStyle={{ color: COLORS.Black }}
-              style={{
-                marginVertical: width * 0.02,
-                borderWidth: 0,
-                elevation: 4,
-              }}
-              // listItemContainerStyle={{backgroundColor:'red'}}
-              // // style={{backgroundColor:'red'}}
-              // dropDownContainerStyle={{backgroundColor:'red'}}
-              setItems={setItems}
-            />
-          </View>
-          <View style={{ zIndex: 10 }}>
-            <Text style={{ color: COLORS.TextBlack, fontWeight: "600" }}>
-              Gender :
-            </Text>
-            <DropDownPicker
-              multiple={true}
-              open={GenderListopen}
-              value={GenderListvalue}
-              items={GenderListitems}
-              setOpen={setGenderListOpen}
-              placeholder="Select Gender"
-              placeholderStyle={{
-                color: COLORS.SperatorColor,
-                fontWeight: "500",
-              }}
-              setValue={setGenderListValue}
-              listItemLabelStyle={{ color: COLORS.Black }}
-              style={{
-                marginVertical: width * 0.02,
-                borderWidth: 0,
-                elevation: 4,
-              }}
-              // listItemContainerStyle={{backgroundColor:'red'}}
-              // // style={{backgroundColor:'red'}}
-              // dropDownContainerStyle={{backgroundColor:'red'}}
-              setItems={setItems}
-            />
-          </View>
-          <View style={{ zIndex: 9 }}>
-            <Text style={{ color: COLORS.TextBlack, fontWeight: "600" }}>
-              Line of Education :
-            </Text>
-            <DropDownPicker
-              multiple={true}
-              open={EducationLineopen}
-              value={EducationLinevalue}
-              dropDownDirection="BOTTOM"
-              placeholder="Select Education ( Max 3)"
-              placeholderStyle={{
-                color: COLORS.SperatorColor,
-                fontWeight: "500",
-              }}
-              items={EducationLineitems}
-              setOpen={setEducationLineOpen}
-              setValue={setEducationLineValue}
-              listItemLabelStyle={{ color: COLORS.Black }}
-              style={{
-                marginVertical: width * 0.02,
-                borderWidth: 0,
-                elevation: 4,
-              }}
-              // listItemContainerStyle={{backgroundColor:'red'}}
-              // // style={{backgroundColor:'red'}}
-              // dropDownContainerStyle={{backgroundColor:'red'}}
-              // setItems={setEducationLineItems}
-            />
-          </View>
-          <View style={{ zIndex: 8 }}>
-            <Text style={{ color: COLORS.TextBlack, fontWeight: "600" }}>
-              Qualification :
-            </Text>
-            <DropDownPicker
-              open={Qualificationopen}
-              value={Qualificationvalue}
-              items={Qualificationitems}
-              dropDownDirection="BOTTOM"
-              placeholder="Select Qualification"
-              placeholderStyle={{
-                color: COLORS.SperatorColor,
-                fontWeight: "500",
-              }}
-              setOpen={setQualificationOpen}
-              setValue={setQualificationValue}
-              listItemLabelStyle={{ color: COLORS.Black }}
-              style={{
-                marginVertical: width * 0.02,
-                borderWidth: 0,
-                elevation: 4,
-              }}
-              // listItemContainerStyle={{backgroundColor:'red'}}
-              // // style={{backgroundColor:'red'}}
-              // dropDownContainerStyle={{backgroundColor:'red'}}
-              setItems={setItems}
-            />
-          </View>
-
-          <View style={{ zIndex: 7 }}>
-            <Text style={{ color: COLORS.TextBlack, fontWeight: "600" }}>
-              Additional Skills :
-            </Text>
-            <DropDownPicker
-              multiple={true}
-              open={AddSkillsopen}
-              value={AddSkillsvalue}
-              items={AddSkillsitems}
-              dropDownDirection="BOTTOM"
-              placeholder="Select Skills ( Max 3)"
-              placeholderStyle={{
-                color: COLORS.SperatorColor,
-                fontWeight: "500",
-              }}
-              setOpen={setAddSkillsOpen}
-              setValue={setAddSkillsValue}
-              listItemLabelStyle={{ color: COLORS.Black }}
-              style={{
-                marginVertical: width * 0.02,
-                borderWidth: 0,
-                elevation: 4,
-              }}
-              // listItemContainerStyle={{backgroundColor:'red'}}
-              // // style={{backgroundColor:'red'}}
-              // dropDownContainerStyle={{backgroundColor:'red'}}
-              setItems={setItems}
-            />
-          </View>
-
-          <View style={{ zIndex: 6 }}>
-            <Text style={{ color: COLORS.TextBlack, fontWeight: "600" }}>
-              Work Experience Years :
-            </Text>
-            <DropDownPicker
-              open={WorkExperienceopen}
-              value={WorkExperiencevalue}
-              items={WorkExperienceitems}
-              dropDownDirection="BOTTOM"
-              placeholder="Select Experience"
-              placeholderStyle={{
-                color: COLORS.SperatorColor,
-                fontWeight: "500",
-              }}
-              setOpen={setWorkExperienceOpen}
-              setValue={setWorkExperienceValue}
-              listItemLabelStyle={{ color: COLORS.Black }}
-              style={{
-                marginVertical: width * 0.02,
-                borderWidth: 0,
-                elevation: 4,
-              }}
-              // listItemContainerStyle={{backgroundColor:'red'}}
-              // // style={{backgroundColor:'red'}}
-              // dropDownContainerStyle={{backgroundColor:'red'}}
-              setItems={setItems}
-            />
-          </View>
-
-          <View style={{ zIndex: 5 }}>
-            <Text style={{ color: COLORS.TextBlack, fontWeight: "600" }}>
-              NO. of Vacancies :
-            </Text>
-            <DropDownPicker
-              open={Vaccanciesopen}
-              value={Vaccanciesvalue}
-              items={Vaccanciesitems}
-              dropDownDirection="BOTTOM"
-              placeholder="10"
-              placeholderStyle={{
-                color: COLORS.SperatorColor,
-                fontWeight: "500",
-              }}
-              setOpen={setVaccanciesOpen}
-              setValue={setVaccanciesValue}
-              listItemLabelStyle={{ color: COLORS.Black }}
-              style={{
-                marginVertical: width * 0.02,
-                borderWidth: 0,
-                elevation: 4,
-              }}
-              // listItemContainerStyle={{backgroundColor:'red'}}
-              // // style={{backgroundColor:'red'}}
-              // dropDownContainerStyle={{backgroundColor:'red'}}
-              setItems={setItems}
-            />
-          </View>
-
-          <View style={{ zIndex: 4 }}>
-            <Text style={{ color: COLORS.TextBlack, fontWeight: "600" }}>
-              Age Group :
-            </Text>
-            <DropDownPicker
-              open={AgeListopen}
-              value={AgeListvalue}
-              items={AgeListitems}
-              dropDownDirection="BOTTOM"
-              placeholder="Select Age Group"
-              placeholderStyle={{
-                color: COLORS.SperatorColor,
-                fontWeight: "500",
-              }}
-              setOpen={setAgeListOpen}
-              setValue={setAgeListValue}
-              listItemLabelStyle={{ color: COLORS.Black }}
-              style={{
-                marginVertical: width * 0.02,
-                borderWidth: 0,
-                elevation: 4,
-              }}
-              // listItemContainerStyle={{backgroundColor:'red'}}
-              // // style={{backgroundColor:'red'}}
-              // dropDownContainerStyle={{backgroundColor:'red'}}
-              setItems={setItems}
-            />
-          </View>
-
-          <View style={{ zIndex: 3 }}>
-            <Text style={{ color: COLORS.TextBlack, fontWeight: "600" }}>
-              Work Place :
-            </Text>
-            <DropDownPicker
-              open={WorkPlaceopen}
-              value={WorkPlacevalue}
-              items={WorkPlaceitems}
-              dropDownDirection="BOTTOM"
-              placeholder="Select Work Place"
-              placeholderStyle={{
-                color: COLORS.SperatorColor,
-                fontWeight: "500",
-              }}
-              setOpen={setWorkPlaceOpen}
-              setValue={setWorkPlaceValue}
-              listItemLabelStyle={{ color: COLORS.Black }}
-              style={{
-                marginVertical: width * 0.02,
-                borderWidth: 0,
-                elevation: 4,
-              }}
-              // listItemContainerStyle={{backgroundColor:'red'}}
-              // // style={{backgroundColor:'red'}}
-              // dropDownContainerStyle={{backgroundColor:'red'}}
-              setItems={setItems}
-            />
-          </View>
-
-          <View style={{ zIndex: 2 }}>
-            <Text style={{ color: COLORS.TextBlack, fontWeight: "600" }}>
-              Salary Range :
-            </Text>
-            <DropDownPicker
-              open={SalaryRangeopen}
-              value={SalaryRangevalue}
-              items={SalaryRangeitems}
-              dropDownDirection="BOTTOM"
-              placeholder="Select Range"
-              placeholderStyle={{
-                color: COLORS.SperatorColor,
-                fontWeight: "500",
-              }}
-              setOpen={setSalaryRangeOpen}
-              setValue={setSalaryRangeValue}
-              listItemLabelStyle={{ color: COLORS.Black }}
-              style={{
-                marginVertical: width * 0.02,
-                borderWidth: 0,
-                elevation: 4,
-              }}
-              // listItemContainerStyle={{backgroundColor:'red'}}
-              // // style={{backgroundColor:'red'}}
-              // dropDownContainerStyle={{backgroundColor:'red'}}
-              setItems={setItems}
-            />
-          </View>
-
-          <View style={{ zIndex: 1 }}>
-            <Text style={{ color: COLORS.TextBlack, fontWeight: "600" }}>
-              Locality :
-            </Text>
-            <DropDownPicker
-              open={Localityopen}
-              value={Localityvalue}
-              items={Localityitems}
-              dropDownDirection="BOTTOM"
-              placeholder="Select Locality"
-              placeholderStyle={{
-                color: COLORS.SperatorColor,
-                fontWeight: "500",
-              }}
-              setOpen={setLocalityOpen}
-              setValue={setLocalityValue}
-              listItemLabelStyle={{ color: COLORS.Black }}
-              style={{
-                marginVertical: width * 0.02,
-                borderWidth: 0,
-                elevation: 4,
-              }}
-              // listItemContainerStyle={{backgroundColor:'red'}}
-              // // style={{backgroundColor:'red'}}
-              // dropDownContainerStyle={{backgroundColor:'red'}}
-              setItems={setItems}
-            />
-          </View>
-
-          <View style={{ zIndex: 0 }}>
-            <Text style={{ color: COLORS.TextBlack, fontWeight: "600" }}>
-              Additional Facilities :
-            </Text>
-            <DropDownPicker
-              multiple={true}
-              open={AdditionalFacilityopen}
-              value={AdditionalFacilityvalue}
-              items={AdditionalFacilityitems}
-              dropDownDirection="BOTTOM"
-              placeholder="Select Additional Facilites (Multiple Allowed)"
-              placeholderStyle={{
-                color: COLORS.SperatorColor,
-                fontWeight: "500",
-              }}
-              setOpen={setAdditionalFacilityOpen}
-              setValue={setAdditionalFacilityValue}
-              listItemLabelStyle={{ color: COLORS.Black }}
-              style={{
-                marginVertical: width * 0.02,
-                borderWidth: 0,
-                elevation: 4,
-              }}
-              // listItemContainerStyle={{backgroundColor:'red'}}
-              // // style={{backgroundColor:'red'}}
-              // dropDownContainerStyle={{backgroundColor:'red'}}
-              setItems={setItems}
-            />
-          </View>
-
-          <TouchableOpacity
-            onPress={() => CheckValidation()}
-            style={{
-              backgroundColor: COLORS.Black,
-              paddingVertical: height * 0.014,
-              borderRadius: width * 0.02,
-              marginTop: 20,
-              zIndex: -1,
-            }}
-          >
-            <Text
-              style={{
-                color: COLORS.White,
-                textAlign: "center",
-                fontWeight: "600",
-              }}
-            >
-              Pay & Submit Job Post
-            </Text>
-          </TouchableOpacity>
-        </View>
+            Pay & Submit Job Post
+          </Text>
+        </TouchableOpacity>
       </ScrollView>
     </View>
   );
@@ -809,4 +835,8 @@ const PostJob = () => {
 
 export default PostJob;
 
-const styles = StyleSheet.create({});
+const styles = StyleSheet.create({
+  dropDownContainerStyle: {
+    zIndex: 1000, // Ensures dropdown is above other elements
+  },
+});
