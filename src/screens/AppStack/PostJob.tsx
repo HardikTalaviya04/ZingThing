@@ -20,6 +20,7 @@ import OnBordingHeader from "../../common/Components/OnBordingHeader";
 import { RFValue } from "react-native-responsive-fontsize";
 import { SCREENS } from "../../common/Utils/screenName";
 import RazorpayCheckout from "react-native-razorpay";
+import { FlatList } from "react-native";
 
 const PostJob = () => {
   const navigation = useNavigation();
@@ -92,9 +93,10 @@ const PostJob = () => {
   const [CandidateMessagevalue, setCandidateMessagevalue] = useState("");
 
   const [sbscriptionAmount, setSbscriptionAmount] = useState(50);
-
+  useEffect(() => {
+    console.log(AdditionalFacilityvalue, AdditionalFacilityitems);
+  }, [AdditionalFacilityvalue]);
   const CheckValidation = () => {
-    console.log("AdditionalFacilityvalue", AdditionalFacilityvalue);
     if (value == null) {
       Alert.alert("Please Select Job Type");
       return;
@@ -103,9 +105,11 @@ const PostJob = () => {
       Alert.alert("Please Select Job Title");
       return;
     }
-    if (BusinnesTypevalue == null) {
-      Alert.alert("Please Select Business Type");
-      return;
+    if (value == 1) {
+      if (BusinnesTypevalue == null) {
+        Alert.alert("Please Select Business Type");
+        return;
+      }
     }
     if (WorkingTimevalue == null) {
       Alert.alert("Please Select Working Time");
@@ -292,7 +296,7 @@ const PostJob = () => {
       data.append("job_post_date", "2024-07-11");
       data.append("vendor_id", "1");
       data.append("job_title_id", JobTitlevalue);
-      data.append("business_id", BusinnesTypevalue);
+      data.append("business_id", BusinnesTypevalue ? BusinnesTypevalue : "");
       data.append("working_time_id", WorkingTimevalue);
       data.append("gender_id", GenderListvalue);
       data.append("line_of_educations_ids", EducationLinevalue);
@@ -339,7 +343,7 @@ const PostJob = () => {
     setGenderListOpen(index == 4 ? !GenderListopen : false);
     setEducationLineOpen(index == 5 ? !EducationLineopen : false);
     setQualificationOpen(index == 6 ? !Qualificationopen : false);
-    setAddSkillsOpen(index == 7 ? !AdditionalFacilityopen : false);
+    setAddSkillsOpen(index == 7 ? !AddSkillsopen : false);
     setWorkExperienceOpen(index == 8 ? !WorkExperienceopen : false);
     setVaccanciesOpen(index == 9 ? !Vaccanciesopen : false);
     setAgeListOpen(index == 10 ? !AgeListopen : false);
@@ -348,6 +352,10 @@ const PostJob = () => {
     setLocalityOpen(index == 13 ? !Localityopen : false);
     setAdditionalFacilityOpen(index == 14 ? !AdditionalFacilityopen : false);
   };
+
+  useEffect(() => {
+    console.log(BusinnesTypevalue, "BusinnesTypevalue");
+  }, [BusinnesTypevalue]);
 
   return (
     <View
@@ -386,7 +394,7 @@ const PostJob = () => {
           scrollViewProps={{ nestedScrollEnabled: true }}
           open={open}
           value={value}
-          placeholder="Select Job Type"
+          placeholder="Select Job Type (Single)"
           placeholderStyle={{
             color: COLORS.SperatorColor,
             fontWeight: "500",
@@ -408,14 +416,20 @@ const PostJob = () => {
           dropDownContainerStyle={styles.dropDownContainerStyle}
           setItems={setItems}
         />
-        <Text style={{ color: COLORS.TextBlack, fontWeight: "600" }}>
+        <Text
+          style={{
+            color: COLORS.TextBlack,
+            marginTop: RFValue(6),
+            fontWeight: "600",
+          }}
+        >
           Job Title :
         </Text>
         <DropDownPicker
           open={JobTitleopen}
           listMode="SCROLLVIEW"
           scrollViewProps={{ nestedScrollEnabled: true }}
-          placeholder="Select Job Title"
+          placeholder="Select Job Title (Single)"
           placeholderStyle={{
             color: COLORS.SperatorColor,
             fontWeight: "500",
@@ -437,37 +451,77 @@ const PostJob = () => {
           dropDownContainerStyle={styles.dropDownContainerStyle}
           setItems={setItems}
         />
-        <Text style={{ color: COLORS.TextBlack, fontWeight: "600" }}>
-          Business Type :
-        </Text>
-        <DropDownPicker
-          multiple={true}
-          listMode="SCROLLVIEW"
-          scrollViewProps={{ nestedScrollEnabled: true }}
-          open={BusinnesTypeopen}
-          placeholder="Select Business Type ( Max 5)"
-          placeholderStyle={{
-            color: COLORS.SperatorColor,
-            fontWeight: "500",
-          }}
-          value={BusinnesTypevalue}
-          items={BusinnesTypeitems}
-          setOpen={() => setDropdownOpenFunction(2)}
-          setValue={setBusinnesTypeValue}
-          listItemLabelStyle={{ color: COLORS.Black }}
+
+        {value == 2 && (
+          <>
+            <Text
+              style={{
+                color: COLORS.TextBlack,
+                marginTop: RFValue(6),
+                fontWeight: "600",
+              }}
+            >
+              Business Type :
+            </Text>
+            <DropDownPicker
+              max={5}
+              multiple={true}
+              listMode="SCROLLVIEW"
+              scrollViewProps={{ nestedScrollEnabled: true }}
+              open={BusinnesTypeopen}
+              placeholder="Select Business Type ( Max 5)"
+              placeholderStyle={{
+                color: COLORS.SperatorColor,
+                fontWeight: "500",
+              }}
+              value={BusinnesTypevalue}
+              items={BusinnesTypeitems}
+              setOpen={() => setDropdownOpenFunction(2)}
+              setValue={setBusinnesTypeValue}
+              listItemLabelStyle={{ color: COLORS.Black }}
+              style={{
+                marginVertical: width * 0.02,
+                borderWidth: 0,
+                elevation: 4,
+                zIndex: 998,
+              }}
+              dropDownContainerStyle={styles.dropDownContainerStyle}
+              setItems={setItems}
+            />
+            <FlatList
+              data={[1]}
+              scrollEnabled={false}
+              style={{ flexWrap: "wrap", marginTop: RFValue(5) }}
+              keyExtractor={(item) => item}
+              renderItem={({ item, index }) =>
+                BusinnesTypevalue != null ? (
+                  typeof BusinnesTypevalue == "number" ? (
+                    <Text style={styles.itemText}>
+                      {BusinnesTypeitems[BusinnesTypevalue - 5].label}
+                    </Text>
+                  ) : (
+                    BusinnesTypevalue.map((items, indexx) => (
+                      <Text style={{ maxHeight: RFValue(250) }}>
+                        {BusinnesTypeitems?.[items - 5]?.label}
+                      </Text>
+                    ))
+                  )
+                ) : null
+              }
+            />
+          </>
+        )}
+        <Text
           style={{
-            marginVertical: width * 0.02,
-            borderWidth: 0,
-            elevation: 4,
-            zIndex: 998,
+            color: COLORS.TextBlack,
+            marginTop: RFValue(6),
+            fontWeight: "600",
           }}
-          dropDownContainerStyle={styles.dropDownContainerStyle}
-          setItems={setItems}
-        />
-        <Text style={{ color: COLORS.TextBlack, fontWeight: "600" }}>
+        >
           Job Time/Working Time :
         </Text>
         <DropDownPicker
+          multiple={true}
           listMode="SCROLLVIEW"
           scrollViewProps={{ nestedScrollEnabled: true }}
           open={WorkingTimeopen}
@@ -490,18 +544,43 @@ const PostJob = () => {
           dropDownContainerStyle={styles.dropDownContainerStyle}
           setItems={setItems}
         />
-        <Text style={{ color: COLORS.TextBlack, fontWeight: "600" }}>
+        <FlatList
+          data={[1]}
+          horizontal={true}
+          keyExtractor={(item) => item}
+          renderItem={({ item, index }) =>
+            WorkingTimevalue != null ? (
+              typeof WorkingTimevalue == "number" ? (
+                <Text style={styles.itemText}>
+                  {WorkingTimeitems[WorkingTimevalue - 1].label},{" "}
+                </Text>
+              ) : (
+                WorkingTimevalue.map((items, indexx) => (
+                  <Text style={styles.itemText}>
+                    {WorkingTimeitems?.[items - 1]?.label},{" "}
+                  </Text>
+                ))
+              )
+            ) : null
+          }
+        />
+        <Text
+          style={{
+            color: COLORS.TextBlack,
+            marginTop: RFValue(6),
+            fontWeight: "600",
+          }}
+        >
           Gender :
         </Text>
         <DropDownPicker
-          multiple={true}
           listMode="SCROLLVIEW"
           scrollViewProps={{ nestedScrollEnabled: true }}
           open={GenderListopen}
           value={GenderListvalue}
           items={GenderListitems}
           setOpen={() => setDropdownOpenFunction(4)}
-          placeholder="Select Gender"
+          placeholder="Select Gender (Single)"
           placeholderStyle={{
             color: COLORS.SperatorColor,
             fontWeight: "500",
@@ -517,10 +596,17 @@ const PostJob = () => {
           dropDownContainerStyle={styles.dropDownContainerStyle}
           setItems={setItems}
         />
-        <Text style={{ color: COLORS.TextBlack, fontWeight: "600" }}>
+        <Text
+          style={{
+            color: COLORS.TextBlack,
+            marginTop: RFValue(6),
+            fontWeight: "600",
+          }}
+        >
           Line of Education :
         </Text>
         <DropDownPicker
+          max={3}
           multiple={true}
           listMode="SCROLLVIEW"
           scrollViewProps={{ nestedScrollEnabled: true }}
@@ -544,7 +630,32 @@ const PostJob = () => {
           }}
           dropDownContainerStyle={styles.dropDownContainerStyle}
         />
-        <Text style={{ color: COLORS.TextBlack, fontWeight: "600" }}>
+        <FlatList
+          data={[1]}
+          keyExtractor={(item) => item}
+          renderItem={({ item, index }) =>
+            EducationLinevalue != null ? (
+              typeof EducationLinevalue == "number" ? (
+                <Text style={styles.itemText}>
+                  {EducationLineitems[EducationLinevalue - 1].label},{" "}
+                </Text>
+              ) : (
+                EducationLinevalue.map((items, indexx) => (
+                  <Text style={styles.itemText}>
+                    {EducationLineitems?.[items - 1]?.label},{" "}
+                  </Text>
+                ))
+              )
+            ) : null
+          }
+        />
+        <Text
+          style={{
+            color: COLORS.TextBlack,
+            marginTop: RFValue(6),
+            fontWeight: "600",
+          }}
+        >
           Qualification :
         </Text>
         <DropDownPicker
@@ -554,7 +665,7 @@ const PostJob = () => {
           value={Qualificationvalue}
           items={Qualificationitems}
           dropDownDirection="BOTTOM"
-          placeholder="Select Qualification"
+          placeholder="Select Qualification (Single)"
           placeholderStyle={{
             color: COLORS.SperatorColor,
             fontWeight: "500",
@@ -571,10 +682,17 @@ const PostJob = () => {
           dropDownContainerStyle={styles.dropDownContainerStyle}
           setItems={setItems}
         />
-        <Text style={{ color: COLORS.TextBlack, fontWeight: "600" }}>
+        <Text
+          style={{
+            color: COLORS.TextBlack,
+            marginTop: RFValue(6),
+            fontWeight: "600",
+          }}
+        >
           Additional Skills :
         </Text>
         <DropDownPicker
+          max={3}
           multiple={true}
           listMode="SCROLLVIEW"
           scrollViewProps={{ nestedScrollEnabled: true }}
@@ -599,7 +717,32 @@ const PostJob = () => {
           dropDownContainerStyle={styles.dropDownContainerStyle}
           setItems={setItems}
         />
-        <Text style={{ color: COLORS.TextBlack, fontWeight: "600" }}>
+        <FlatList
+          data={[1]}
+          keyExtractor={(item) => item}
+          renderItem={({ item, index }) =>
+            AddSkillsvalue != null ? (
+              typeof AddSkillsvalue == "number" ? (
+                <Text style={styles.itemText}>
+                  {AddSkillsitems[AddSkillsvalue - 1].label},{" "}
+                </Text>
+              ) : (
+                AddSkillsvalue.map((items, indexx) => (
+                  <Text style={styles.itemText}>
+                    {AddSkillsitems?.[items - 1]?.label},{" "}
+                  </Text>
+                ))
+              )
+            ) : null
+          }
+        />
+        <Text
+          style={{
+            color: COLORS.TextBlack,
+            marginTop: RFValue(6),
+            fontWeight: "600",
+          }}
+        >
           Work Experience Years :
         </Text>
         <DropDownPicker
@@ -609,7 +752,7 @@ const PostJob = () => {
           value={WorkExperiencevalue}
           items={WorkExperienceitems}
           dropDownDirection="BOTTOM"
-          placeholder="Select Experience"
+          placeholder="Select Experience (Single)"
           placeholderStyle={{
             color: COLORS.SperatorColor,
             fontWeight: "500",
@@ -625,7 +768,13 @@ const PostJob = () => {
           }}
           dropDownContainerStyle={styles.dropDownContainerStyle}
         />
-        <Text style={{ color: COLORS.TextBlack, fontWeight: "600" }}>
+        <Text
+          style={{
+            color: COLORS.TextBlack,
+            marginTop: RFValue(6),
+            fontWeight: "600",
+          }}
+        >
           NO. of Vacancies :
         </Text>
         <DropDownPicker
@@ -635,7 +784,7 @@ const PostJob = () => {
           value={Vaccanciesvalue}
           items={Vaccanciesitems}
           dropDownDirection="BOTTOM"
-          placeholder="10"
+          placeholder="10 (Single)"
           placeholderStyle={{
             color: COLORS.SperatorColor,
             fontWeight: "500",
@@ -652,7 +801,13 @@ const PostJob = () => {
           dropDownContainerStyle={styles.dropDownContainerStyle}
           setItems={setItems}
         />
-        <Text style={{ color: COLORS.TextBlack, fontWeight: "600" }}>
+        <Text
+          style={{
+            color: COLORS.TextBlack,
+            marginTop: RFValue(6),
+            fontWeight: "600",
+          }}
+        >
           Age Group :
         </Text>
         <DropDownPicker
@@ -679,7 +834,13 @@ const PostJob = () => {
           dropDownContainerStyle={styles.dropDownContainerStyle}
           setItems={setItems}
         />
-        <Text style={{ color: COLORS.TextBlack, fontWeight: "600" }}>
+        <Text
+          style={{
+            color: COLORS.TextBlack,
+            marginTop: RFValue(6),
+            fontWeight: "600",
+          }}
+        >
           Work Place :
         </Text>
         <DropDownPicker
@@ -706,7 +867,13 @@ const PostJob = () => {
           dropDownContainerStyle={styles.dropDownContainerStyle}
           setItems={setItems}
         />
-        <Text style={{ color: COLORS.TextBlack, fontWeight: "600" }}>
+        <Text
+          style={{
+            color: COLORS.TextBlack,
+            marginTop: RFValue(6),
+            fontWeight: "600",
+          }}
+        >
           Salary Range :
         </Text>
         <DropDownPicker
@@ -733,7 +900,13 @@ const PostJob = () => {
           dropDownContainerStyle={styles.dropDownContainerStyle}
           setItems={setItems}
         />
-        <Text style={{ color: COLORS.TextBlack, fontWeight: "600" }}>
+        <Text
+          style={{
+            color: COLORS.TextBlack,
+            marginTop: RFValue(6),
+            fontWeight: "600",
+          }}
+        >
           Locality :
         </Text>
         <DropDownPicker
@@ -760,7 +933,13 @@ const PostJob = () => {
           dropDownContainerStyle={styles.dropDownContainerStyle}
           setItems={setItems}
         />
-        <Text style={{ color: COLORS.TextBlack, fontWeight: "600" }}>
+        <Text
+          style={{
+            color: COLORS.TextBlack,
+            marginTop: RFValue(6),
+            fontWeight: "600",
+          }}
+        >
           Additional Facilities :
         </Text>
         <DropDownPicker
@@ -788,8 +967,33 @@ const PostJob = () => {
           dropDownContainerStyle={styles.dropDownContainerStyle}
           setItems={setItems}
         />
-        <Text style={{ color: COLORS.TextBlack, fontWeight: "600" }}>
-          Candidate Message :
+        <FlatList
+          data={[1]}
+          keyExtractor={(item) => item}
+          renderItem={({ item, index }) =>
+            AdditionalFacilityvalue != null ? (
+              typeof AdditionalFacilityvalue == "number" ? (
+                <Text style={styles.itemText}>
+                  {AdditionalFacilityitems[AdditionalFacilityvalue - 4].label},{" "}
+                </Text>
+              ) : (
+                AdditionalFacilityvalue.map((items, indexx) => (
+                  <Text style={styles.itemText}>
+                    {AdditionalFacilityitems?.[items - 4]?.label},{" "}
+                  </Text>
+                ))
+              )
+            ) : null
+          }
+        />
+        <Text
+          style={{
+            color: COLORS.TextBlack,
+            marginTop: RFValue(6),
+            fontWeight: "600",
+          }}
+        >
+          Additonal Message :
         </Text>
         <TextInput
           value={CandidateMessagevalue}
@@ -807,6 +1011,18 @@ const PostJob = () => {
           }}
           placeholder="Enter Candidate Message"
         />
+
+        <Text
+          style={{
+            color: COLORS.TextBlack,
+            marginTop: RFValue(6),
+            fontSize: RFValue(10),
+          }}
+        >
+          On Click of Pay & Submit, You will be redirected to payments page to
+          pay .. amount to make your job post active. This job post will be
+          available for x days.
+        </Text>
 
         <TouchableOpacity
           onPress={() => CheckValidation()}

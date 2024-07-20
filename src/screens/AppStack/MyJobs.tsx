@@ -20,13 +20,13 @@ import { FONTS } from "../../common/Utils/fonts";
 import { useIsFocused, useNavigation } from "@react-navigation/native";
 import { SCREENS } from "../../common/Utils/screenName";
 import moment from "moment";
+import Loader from "../../common/Components/Loader";
 
 export default function MyJobs() {
   const [screenState, setscreenState] = useState(0);
+  const [isLoading, setisLoading] = useState(true);
   const [mainDataForFirst, setMainDataForFirst] = useState([]);
-  const [mainDataForSecoend, setMainDataForSecoend] = useState([
-    1, 2, 3, 4, 5, 6, 7, 8, 9,
-  ]);
+  const [mainDataForSecoend, setMainDataForSecoend] = useState([]);
   const ScreenHeight = Dimensions.get("screen").height;
   const ScreenWidth = Dimensions.get("screen").width;
   const navigation = useNavigation();
@@ -53,8 +53,8 @@ export default function MyJobs() {
         "https://zingthing.ptechwebs.com/api/available-candiates-list/1"
       );
       const json = await response.json();
-
       setMainDataForSecoend(json.data);
+      setisLoading(false);
     } catch (error) {
       // setError(error);
     } finally {
@@ -436,36 +436,40 @@ export default function MyJobs() {
             </View>
           )}
         </View>
-        {screenState == 0 ? (
-          <FlatList
-            contentContainerStyle={{}}
-            showsVerticalScrollIndicator={false}
-            data={mainDataForFirst}
-            renderItem={renderItemForFirst}
-            ListEmptyComponent={EmptyComponent}
-          />
-        ) : (
-          <>
-            <Text
-              style={{
-                fontSize: RFValue(17),
-                color: COLORS.Gray,
-                marginTop: RFValue(10),
-                fontWeight: "500",
-              }}
-            >
-              Candidates matching Job posts
-            </Text>
+        {!isLoading ? (
+          screenState == 0 ? (
             <FlatList
-              contentContainerStyle={{
-                paddingBottom: RFValue(20),
-              }}
+              contentContainerStyle={{}}
               showsVerticalScrollIndicator={false}
-              data={mainDataForSecoend}
-              renderItem={renderItemForSecoend}
+              data={mainDataForFirst}
+              renderItem={renderItemForFirst}
               ListEmptyComponent={EmptyComponent}
             />
-          </>
+          ) : (
+            <>
+              <Text
+                style={{
+                  fontSize: RFValue(17),
+                  color: COLORS.Gray,
+                  marginTop: RFValue(10),
+                  fontWeight: "500",
+                }}
+              >
+                Candidates matching Job posts
+              </Text>
+              <FlatList
+                contentContainerStyle={{
+                  paddingBottom: RFValue(20),
+                }}
+                showsVerticalScrollIndicator={false}
+                data={mainDataForSecoend}
+                renderItem={renderItemForSecoend}
+                ListEmptyComponent={EmptyComponent}
+              />
+            </>
+          )
+        ) : (
+          <Loader />
         )}
       </ImageBackground>
     </View>
