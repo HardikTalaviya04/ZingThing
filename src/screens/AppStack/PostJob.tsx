@@ -21,8 +21,10 @@ import { RFValue } from "react-native-responsive-fontsize";
 import { SCREENS } from "../../common/Utils/screenName";
 import RazorpayCheckout from "react-native-razorpay";
 import { FlatList } from "react-native";
+import moment from "moment";
 
-const PostJob = () => {
+const PostJob = ({ route }: any) => {
+  const NavData = route?.params?.MainItem ? route?.params?.MainItem : null;
   const navigation = useNavigation();
   const pickerRef = useRef();
   const [selectedLanguage, setSelectedLanguage] = useState();
@@ -93,6 +95,8 @@ const PostJob = () => {
   const [CandidateMessagevalue, setCandidateMessagevalue] = useState("");
 
   const [sbscriptionAmount, setSbscriptionAmount] = useState(50);
+  const [sbscriptionDayes, setSbscriptionDayes] = useState(10);
+  const [sbscriptionInDayes, setSbscriptionInDayes] = useState(10);
   useEffect(() => {
     console.log(AdditionalFacilityvalue, AdditionalFacilityitems);
   }, [AdditionalFacilityvalue]);
@@ -105,60 +109,62 @@ const PostJob = () => {
       Alert.alert("Please Select Job Title");
       return;
     }
-    if (value == 1) {
+    if (value == 2) {
       if (BusinnesTypevalue == null) {
         Alert.alert("Please Select Business Type");
         return;
       }
+      if (WorkingTimevalue == null) {
+        Alert.alert("Please Select Working Time");
+        return;
+      }
+      if (GenderListvalue == null) {
+        Alert.alert("Please Select Gender List");
+        return;
+      }
+      if (EducationLinevalue == null) {
+        Alert.alert("Please Select Education Line");
+        return;
+      }
+      if (Qualificationvalue == null) {
+        Alert.alert("Please Select Qualification");
+        return;
+      }
+      if (AddSkillsvalue == null) {
+        Alert.alert("Please Select Add Skills");
+        return;
+      }
+      if (WorkExperiencevalue == null) {
+        Alert.alert("Please Select Work Experience");
+        return;
+      }
+      if (Vaccanciesvalue == null) {
+        Alert.alert("Please Select Vaccancies");
+        return;
+      }
+      if (AgeListvalue == null) {
+        Alert.alert("Please Select Age List");
+        return;
+      }
+      if (WorkPlacevalue == null) {
+        Alert.alert("Please Select Work Place");
+        return;
+      }
+      if (SalaryRangevalue == null) {
+        Alert.alert("Please Select Salary Range");
+        return;
+      }
+      if (Localityvalue == null) {
+        Alert.alert("Please Select Locality");
+        return;
+      }
+
+      if (AdditionalFacilityvalue == null) {
+        Alert.alert("Please Select Additional Facility");
+        return;
+      }
     }
-    if (WorkingTimevalue == null) {
-      Alert.alert("Please Select Working Time");
-      return;
-    }
-    if (GenderListvalue == null) {
-      Alert.alert("Please Select Gender List");
-      return;
-    }
-    if (EducationLinevalue == null) {
-      Alert.alert("Please Select Education Line");
-      return;
-    }
-    if (Qualificationvalue == null) {
-      Alert.alert("Please Select Qualification");
-      return;
-    }
-    if (AddSkillsvalue == null) {
-      Alert.alert("Please Select Add Skills");
-      return;
-    }
-    if (WorkExperiencevalue == null) {
-      Alert.alert("Please Select Work Experience");
-      return;
-    }
-    if (Vaccanciesvalue == null) {
-      Alert.alert("Please Select Vaccancies");
-      return;
-    }
-    if (AgeListvalue == null) {
-      Alert.alert("Please Select Age List");
-      return;
-    }
-    if (WorkPlacevalue == null) {
-      Alert.alert("Please Select Work Place");
-      return;
-    }
-    if (SalaryRangevalue == null) {
-      Alert.alert("Please Select Salary Range");
-      return;
-    }
-    if (Localityvalue == null) {
-      Alert.alert("Please Select Locality");
-      return;
-    }
-    if (AdditionalFacilityvalue == null) {
-      Alert.alert("Please Select Additional Facility");
-      return;
-    }
+
     handlePayment();
   };
   const handlePayment = () => {
@@ -179,7 +185,6 @@ const PostJob = () => {
     RazorpayCheckout.open(options)
       .then((data) => {
         // handle success
-        Alert.alert(`Success: ${data.razorpay_payment_id}`);
         onSubmit();
       })
       .catch((error) => {
@@ -277,8 +282,15 @@ const PostJob = () => {
         "https://zingthing.ptechwebs.com/api/job-post-subscription-list"
       );
       const json = await response.json();
-      console.log("HARDIK HARDIK", json.data[0].job_post_rupees);
+      console.log("HARDIK HARDIK", json.data);
       setSbscriptionAmount(json.data[0].job_post_rupees);
+      const expirationDate = moment(moment().format("YYYY-MM-DD")).add(
+        Number(json.data[0].job_post_days),
+        "days"
+      );
+      console.log("object", moment(expirationDate).format("DD-MM-YYYY"));
+      setSbscriptionDayes(moment(expirationDate).format("DD-MM-YYYY"));
+      setSbscriptionInDayes(json.data[0].job_post_days);
     } catch (error) {
       // setError(error);
     } finally {
@@ -330,7 +342,17 @@ const PostJob = () => {
       }
 
       const json = await response.json();
-      navigation.navigate(SCREENS.MyJobs);
+      console.log(json);
+      Alert.alert(
+        "CONGRATULATIONS",
+        `YOUR REQUEST FOR JOB POST WITH NUMBER ${sbscriptionDayes} IS POSTED SUCCESSFULLY AND YOU WILL RECEIVE THE UPDATE NOTIFICATION IN CASE ANY CANDIDATE FITS YOUR JOB POST. YOUR JOB POST WILL REMAIN LIVE TILL ${sbscriptionDayes}. FOR ANY FURTHER ASSISTANCE, PLEASE CONTACT US ON 9723233194 / 9737333194 / 9824333194 / 9979333194 WITH YOUR JOB POST NUMBER.`,
+        [
+          {
+            text: "OK",
+            onPress: (password) => navigation.navigate(SCREENS.DashBoard),
+          },
+        ]
+      );
     } catch (err: any) {
       Alert.alert(err);
     }
@@ -352,10 +374,6 @@ const PostJob = () => {
     setLocalityOpen(index == 13 ? !Localityopen : false);
     setAdditionalFacilityOpen(index == 14 ? !AdditionalFacilityopen : false);
   };
-
-  useEffect(() => {
-    console.log(BusinnesTypevalue, "BusinnesTypevalue");
-  }, [BusinnesTypevalue]);
 
   return (
     <View
@@ -419,7 +437,7 @@ const PostJob = () => {
         <Text
           style={{
             color: COLORS.TextBlack,
-            marginTop: RFValue(6),
+            marginTop: RFValue(10),
             fontWeight: "600",
           }}
         >
@@ -451,13 +469,12 @@ const PostJob = () => {
           dropDownContainerStyle={styles.dropDownContainerStyle}
           setItems={setItems}
         />
-
         {value == 2 && (
           <>
             <Text
               style={{
                 color: COLORS.TextBlack,
-                marginTop: RFValue(6),
+                marginTop: RFValue(10),
                 fontWeight: "600",
               }}
             >
@@ -509,487 +526,492 @@ const PostJob = () => {
                 ) : null
               }
             />
+            <Text
+              style={{
+                color: COLORS.TextBlack,
+                marginTop: RFValue(10),
+                fontWeight: "600",
+              }}
+            >
+              Job Time/Working Time :
+            </Text>
+            <DropDownPicker
+              multiple={true}
+              listMode="SCROLLVIEW"
+              scrollViewProps={{ nestedScrollEnabled: true }}
+              open={WorkingTimeopen}
+              value={WorkingTimevalue}
+              placeholder="Select Time ( Multiple)"
+              placeholderStyle={{
+                color: COLORS.SperatorColor,
+                fontWeight: "500",
+              }}
+              items={WorkingTimeitems}
+              setOpen={() => setDropdownOpenFunction(3)}
+              setValue={setWorkingTimeValue}
+              listItemLabelStyle={{ color: COLORS.Black }}
+              style={{
+                marginVertical: width * 0.02,
+                borderWidth: 0,
+                elevation: 4,
+                zIndex: 997,
+              }}
+              dropDownContainerStyle={styles.dropDownContainerStyle}
+              setItems={setItems}
+            />
+            <FlatList
+              data={[1]}
+              horizontal={true}
+              keyExtractor={(item) => item}
+              renderItem={({ item, index }) =>
+                WorkingTimevalue != null ? (
+                  typeof WorkingTimevalue == "number" ? (
+                    <Text style={styles.itemText}>
+                      {WorkingTimeitems[WorkingTimevalue - 1].label},{" "}
+                    </Text>
+                  ) : (
+                    WorkingTimevalue.map((items, indexx) => (
+                      <Text style={styles.itemText}>
+                        {WorkingTimeitems?.[items - 1]?.label},{" "}
+                      </Text>
+                    ))
+                  )
+                ) : null
+              }
+            />
+            <Text
+              style={{
+                color: COLORS.TextBlack,
+                marginTop: RFValue(10),
+                fontWeight: "600",
+              }}
+            >
+              Gender :
+            </Text>
+            <DropDownPicker
+              listMode="SCROLLVIEW"
+              scrollViewProps={{ nestedScrollEnabled: true }}
+              open={GenderListopen}
+              value={GenderListvalue}
+              items={GenderListitems}
+              setOpen={() => setDropdownOpenFunction(4)}
+              placeholder="Select Gender (Single)"
+              placeholderStyle={{
+                color: COLORS.SperatorColor,
+                fontWeight: "500",
+              }}
+              setValue={setGenderListValue}
+              listItemLabelStyle={{ color: COLORS.Black }}
+              style={{
+                marginVertical: width * 0.02,
+                borderWidth: 0,
+                elevation: 4,
+                zIndex: 996,
+              }}
+              dropDownContainerStyle={styles.dropDownContainerStyle}
+              setItems={setItems}
+            />
+
+            <Text
+              style={{
+                color: COLORS.TextBlack,
+                marginTop: RFValue(10),
+                fontWeight: "600",
+              }}
+            >
+              Line of Education :
+            </Text>
+            <DropDownPicker
+              max={3}
+              multiple={true}
+              listMode="SCROLLVIEW"
+              scrollViewProps={{ nestedScrollEnabled: true }}
+              open={EducationLineopen}
+              value={EducationLinevalue}
+              dropDownDirection="BOTTOM"
+              placeholder="Select Education ( Max 3)"
+              placeholderStyle={{
+                color: COLORS.SperatorColor,
+                fontWeight: "500",
+              }}
+              items={EducationLineitems}
+              setOpen={() => setDropdownOpenFunction(5)}
+              setValue={setEducationLineValue}
+              listItemLabelStyle={{ color: COLORS.Black }}
+              style={{
+                marginVertical: width * 0.02,
+                borderWidth: 0,
+                elevation: 4,
+                zIndex: 995,
+              }}
+              dropDownContainerStyle={styles.dropDownContainerStyle}
+            />
+            <FlatList
+              data={[1]}
+              keyExtractor={(item) => item}
+              renderItem={({ item, index }) =>
+                EducationLinevalue != null ? (
+                  typeof EducationLinevalue == "number" ? (
+                    <Text style={styles.itemText}>
+                      {EducationLineitems[EducationLinevalue - 1].label},{" "}
+                    </Text>
+                  ) : (
+                    EducationLinevalue.map((items, indexx) => (
+                      <Text style={styles.itemText}>
+                        {EducationLineitems?.[items - 1]?.label},{" "}
+                      </Text>
+                    ))
+                  )
+                ) : null
+              }
+            />
+            <Text
+              style={{
+                color: COLORS.TextBlack,
+                marginTop: RFValue(10),
+                fontWeight: "600",
+              }}
+            >
+              Qualification :
+            </Text>
+            <DropDownPicker
+              listMode="SCROLLVIEW"
+              scrollViewProps={{ nestedScrollEnabled: true }}
+              open={Qualificationopen}
+              value={Qualificationvalue}
+              items={Qualificationitems}
+              dropDownDirection="BOTTOM"
+              placeholder="Select Qualification (Single)"
+              placeholderStyle={{
+                color: COLORS.SperatorColor,
+                fontWeight: "500",
+              }}
+              setOpen={() => setDropdownOpenFunction(6)}
+              setValue={setQualificationValue}
+              listItemLabelStyle={{ color: COLORS.Black }}
+              style={{
+                marginVertical: width * 0.02,
+                borderWidth: 0,
+                elevation: 4,
+                zIndex: 994,
+              }}
+              dropDownContainerStyle={styles.dropDownContainerStyle}
+              setItems={setItems}
+            />
+            <Text
+              style={{
+                color: COLORS.TextBlack,
+                marginTop: RFValue(10),
+                fontWeight: "600",
+              }}
+            >
+              Additional Skills :
+            </Text>
+            <DropDownPicker
+              max={3}
+              multiple={true}
+              listMode="SCROLLVIEW"
+              scrollViewProps={{ nestedScrollEnabled: true }}
+              open={AddSkillsopen}
+              value={AddSkillsvalue}
+              items={AddSkillsitems}
+              dropDownDirection="BOTTOM"
+              placeholder="Select Skills ( Max 3)"
+              placeholderStyle={{
+                color: COLORS.SperatorColor,
+                fontWeight: "500",
+              }}
+              setOpen={() => setDropdownOpenFunction(7)}
+              setValue={setAddSkillsValue}
+              listItemLabelStyle={{ color: COLORS.Black }}
+              style={{
+                marginVertical: width * 0.02,
+                borderWidth: 0,
+                elevation: 4,
+                zIndex: 993,
+              }}
+              dropDownContainerStyle={styles.dropDownContainerStyle}
+              setItems={setItems}
+            />
+            <FlatList
+              data={[1]}
+              keyExtractor={(item) => item}
+              renderItem={({ item, index }) =>
+                AddSkillsvalue != null ? (
+                  typeof AddSkillsvalue == "number" ? (
+                    <Text style={styles.itemText}>
+                      {AddSkillsitems[AddSkillsvalue - 1].label},{" "}
+                    </Text>
+                  ) : (
+                    AddSkillsvalue.map((items, indexx) => (
+                      <Text style={styles.itemText}>
+                        {AddSkillsitems?.[items - 1]?.label},{" "}
+                      </Text>
+                    ))
+                  )
+                ) : null
+              }
+            />
+            <Text
+              style={{
+                color: COLORS.TextBlack,
+                marginTop: RFValue(10),
+                fontWeight: "600",
+              }}
+            >
+              Work Experience Years :
+            </Text>
+            <DropDownPicker
+              listMode="SCROLLVIEW"
+              scrollViewProps={{ nestedScrollEnabled: true }}
+              open={WorkExperienceopen}
+              value={WorkExperiencevalue}
+              items={WorkExperienceitems}
+              dropDownDirection="BOTTOM"
+              placeholder="Select Experience (Single)"
+              placeholderStyle={{
+                color: COLORS.SperatorColor,
+                fontWeight: "500",
+              }}
+              setOpen={() => setDropdownOpenFunction(8)}
+              setValue={setWorkExperienceValue}
+              listItemLabelStyle={{ color: COLORS.Black }}
+              style={{
+                marginVertical: width * 0.02,
+                borderWidth: 0,
+                elevation: 4,
+                zIndex: 992,
+              }}
+              dropDownContainerStyle={styles.dropDownContainerStyle}
+            />
+            <Text
+              style={{
+                color: COLORS.TextBlack,
+                marginTop: RFValue(10),
+                fontWeight: "600",
+              }}
+            >
+              NO. of Vacancies :
+            </Text>
+            <DropDownPicker
+              listMode="SCROLLVIEW"
+              scrollViewProps={{ nestedScrollEnabled: true }}
+              open={Vaccanciesopen}
+              value={Vaccanciesvalue}
+              items={Vaccanciesitems}
+              dropDownDirection="BOTTOM"
+              placeholder="10 (Single)"
+              placeholderStyle={{
+                color: COLORS.SperatorColor,
+                fontWeight: "500",
+              }}
+              setOpen={() => setDropdownOpenFunction(9)}
+              setValue={setVaccanciesValue}
+              listItemLabelStyle={{ color: COLORS.Black }}
+              style={{
+                marginVertical: width * 0.02,
+                borderWidth: 0,
+                elevation: 4,
+                zIndex: 991,
+              }}
+              dropDownContainerStyle={styles.dropDownContainerStyle}
+              setItems={setItems}
+            />
+            <Text
+              style={{
+                color: COLORS.TextBlack,
+                marginTop: RFValue(10),
+                fontWeight: "600",
+              }}
+            >
+              Age Group :
+            </Text>
+            <DropDownPicker
+              listMode="SCROLLVIEW"
+              scrollViewProps={{ nestedScrollEnabled: true }}
+              open={AgeListopen}
+              value={AgeListvalue}
+              items={AgeListitems}
+              dropDownDirection="BOTTOM"
+              placeholder="Select Age Group"
+              placeholderStyle={{
+                color: COLORS.SperatorColor,
+                fontWeight: "500",
+              }}
+              setOpen={() => setDropdownOpenFunction(10)}
+              setValue={setAgeListValue}
+              listItemLabelStyle={{ color: COLORS.Black }}
+              style={{
+                marginVertical: width * 0.02,
+                borderWidth: 0,
+                elevation: 4,
+                zIndex: 990,
+              }}
+              dropDownContainerStyle={styles.dropDownContainerStyle}
+              setItems={setItems}
+            />
+            <Text
+              style={{
+                color: COLORS.TextBlack,
+                marginTop: RFValue(10),
+                fontWeight: "600",
+              }}
+            >
+              Work Place :
+            </Text>
+            <DropDownPicker
+              listMode="SCROLLVIEW"
+              scrollViewProps={{ nestedScrollEnabled: true }}
+              open={WorkPlaceopen}
+              value={WorkPlacevalue}
+              items={WorkPlaceitems}
+              dropDownDirection="BOTTOM"
+              placeholder="Select Work Place"
+              placeholderStyle={{
+                color: COLORS.SperatorColor,
+                fontWeight: "500",
+              }}
+              setOpen={() => setDropdownOpenFunction(11)}
+              setValue={setWorkPlaceValue}
+              listItemLabelStyle={{ color: COLORS.Black }}
+              style={{
+                marginVertical: width * 0.02,
+                borderWidth: 0,
+                elevation: 4,
+                zIndex: 989,
+              }}
+              dropDownContainerStyle={styles.dropDownContainerStyle}
+              setItems={setItems}
+            />
+            <Text
+              style={{
+                color: COLORS.TextBlack,
+                marginTop: RFValue(10),
+                fontWeight: "600",
+              }}
+            >
+              Salary Range :
+            </Text>
+            <DropDownPicker
+              listMode="SCROLLVIEW"
+              scrollViewProps={{ nestedScrollEnabled: true }}
+              open={SalaryRangeopen}
+              value={SalaryRangevalue}
+              items={SalaryRangeitems}
+              dropDownDirection="BOTTOM"
+              placeholder="Select Range"
+              placeholderStyle={{
+                color: COLORS.SperatorColor,
+                fontWeight: "500",
+              }}
+              setOpen={() => setDropdownOpenFunction(12)}
+              setValue={setSalaryRangeValue}
+              listItemLabelStyle={{ color: COLORS.Black }}
+              style={{
+                marginVertical: width * 0.02,
+                borderWidth: 0,
+                elevation: 4,
+                zIndex: 988,
+              }}
+              dropDownContainerStyle={styles.dropDownContainerStyle}
+              setItems={setItems}
+            />
+            <Text
+              style={{
+                color: COLORS.TextBlack,
+                marginTop: RFValue(10),
+                fontWeight: "600",
+              }}
+            >
+              Locality :
+            </Text>
+            <DropDownPicker
+              listMode="SCROLLVIEW"
+              scrollViewProps={{ nestedScrollEnabled: true }}
+              open={Localityopen}
+              value={Localityvalue}
+              items={Localityitems}
+              dropDownDirection="BOTTOM"
+              placeholder="Select Locality"
+              placeholderStyle={{
+                color: COLORS.SperatorColor,
+                fontWeight: "500",
+              }}
+              setOpen={() => setDropdownOpenFunction(13)}
+              setValue={setLocalityValue}
+              listItemLabelStyle={{ color: COLORS.Black }}
+              style={{
+                marginVertical: width * 0.02,
+                borderWidth: 0,
+                elevation: 4,
+                zIndex: 987,
+              }}
+              dropDownContainerStyle={styles.dropDownContainerStyle}
+              setItems={setItems}
+            />
+            <Text
+              style={{
+                color: COLORS.TextBlack,
+                marginTop: RFValue(10),
+                fontWeight: "600",
+              }}
+            >
+              Additional Facilities :
+            </Text>
+            <DropDownPicker
+              listMode="SCROLLVIEW"
+              scrollViewProps={{ nestedScrollEnabled: true }}
+              multiple={true}
+              open={AdditionalFacilityopen}
+              value={AdditionalFacilityvalue}
+              items={AdditionalFacilityitems}
+              dropDownDirection="BOTTOM"
+              placeholder="Select Additional Facilites (Multiple Allowed)"
+              placeholderStyle={{
+                color: COLORS.SperatorColor,
+                fontWeight: "500",
+              }}
+              setOpen={() => setDropdownOpenFunction(14)}
+              setValue={setAdditionalFacilityValue}
+              listItemLabelStyle={{ color: COLORS.Black }}
+              style={{
+                marginVertical: width * 0.02,
+                borderWidth: 0,
+                elevation: 4,
+                zIndex: 986,
+              }}
+              dropDownContainerStyle={styles.dropDownContainerStyle}
+              setItems={setItems}
+            />
+            <FlatList
+              data={[1]}
+              keyExtractor={(item) => item}
+              renderItem={({ item, index }) =>
+                AdditionalFacilityvalue != null ? (
+                  typeof AdditionalFacilityvalue == "number" ? (
+                    <Text style={styles.itemText}>
+                      {
+                        AdditionalFacilityitems[AdditionalFacilityvalue - 4]
+                          .label
+                      }
+                      ,{" "}
+                    </Text>
+                  ) : (
+                    AdditionalFacilityvalue.map((items, indexx) => (
+                      <Text style={styles.itemText}>
+                        {AdditionalFacilityitems?.[items - 4]?.label},{" "}
+                      </Text>
+                    ))
+                  )
+                ) : null
+              }
+            />
           </>
         )}
         <Text
           style={{
             color: COLORS.TextBlack,
-            marginTop: RFValue(6),
-            fontWeight: "600",
-          }}
-        >
-          Job Time/Working Time :
-        </Text>
-        <DropDownPicker
-          multiple={true}
-          listMode="SCROLLVIEW"
-          scrollViewProps={{ nestedScrollEnabled: true }}
-          open={WorkingTimeopen}
-          value={WorkingTimevalue}
-          placeholder="Select Time ( Multiple)"
-          placeholderStyle={{
-            color: COLORS.SperatorColor,
-            fontWeight: "500",
-          }}
-          items={WorkingTimeitems}
-          setOpen={() => setDropdownOpenFunction(3)}
-          setValue={setWorkingTimeValue}
-          listItemLabelStyle={{ color: COLORS.Black }}
-          style={{
-            marginVertical: width * 0.02,
-            borderWidth: 0,
-            elevation: 4,
-            zIndex: 997,
-          }}
-          dropDownContainerStyle={styles.dropDownContainerStyle}
-          setItems={setItems}
-        />
-        <FlatList
-          data={[1]}
-          horizontal={true}
-          keyExtractor={(item) => item}
-          renderItem={({ item, index }) =>
-            WorkingTimevalue != null ? (
-              typeof WorkingTimevalue == "number" ? (
-                <Text style={styles.itemText}>
-                  {WorkingTimeitems[WorkingTimevalue - 1].label},{" "}
-                </Text>
-              ) : (
-                WorkingTimevalue.map((items, indexx) => (
-                  <Text style={styles.itemText}>
-                    {WorkingTimeitems?.[items - 1]?.label},{" "}
-                  </Text>
-                ))
-              )
-            ) : null
-          }
-        />
-        <Text
-          style={{
-            color: COLORS.TextBlack,
-            marginTop: RFValue(6),
-            fontWeight: "600",
-          }}
-        >
-          Gender :
-        </Text>
-        <DropDownPicker
-          listMode="SCROLLVIEW"
-          scrollViewProps={{ nestedScrollEnabled: true }}
-          open={GenderListopen}
-          value={GenderListvalue}
-          items={GenderListitems}
-          setOpen={() => setDropdownOpenFunction(4)}
-          placeholder="Select Gender (Single)"
-          placeholderStyle={{
-            color: COLORS.SperatorColor,
-            fontWeight: "500",
-          }}
-          setValue={setGenderListValue}
-          listItemLabelStyle={{ color: COLORS.Black }}
-          style={{
-            marginVertical: width * 0.02,
-            borderWidth: 0,
-            elevation: 4,
-            zIndex: 996,
-          }}
-          dropDownContainerStyle={styles.dropDownContainerStyle}
-          setItems={setItems}
-        />
-        <Text
-          style={{
-            color: COLORS.TextBlack,
-            marginTop: RFValue(6),
-            fontWeight: "600",
-          }}
-        >
-          Line of Education :
-        </Text>
-        <DropDownPicker
-          max={3}
-          multiple={true}
-          listMode="SCROLLVIEW"
-          scrollViewProps={{ nestedScrollEnabled: true }}
-          open={EducationLineopen}
-          value={EducationLinevalue}
-          dropDownDirection="BOTTOM"
-          placeholder="Select Education ( Max 3)"
-          placeholderStyle={{
-            color: COLORS.SperatorColor,
-            fontWeight: "500",
-          }}
-          items={EducationLineitems}
-          setOpen={() => setDropdownOpenFunction(5)}
-          setValue={setEducationLineValue}
-          listItemLabelStyle={{ color: COLORS.Black }}
-          style={{
-            marginVertical: width * 0.02,
-            borderWidth: 0,
-            elevation: 4,
-            zIndex: 995,
-          }}
-          dropDownContainerStyle={styles.dropDownContainerStyle}
-        />
-        <FlatList
-          data={[1]}
-          keyExtractor={(item) => item}
-          renderItem={({ item, index }) =>
-            EducationLinevalue != null ? (
-              typeof EducationLinevalue == "number" ? (
-                <Text style={styles.itemText}>
-                  {EducationLineitems[EducationLinevalue - 1].label},{" "}
-                </Text>
-              ) : (
-                EducationLinevalue.map((items, indexx) => (
-                  <Text style={styles.itemText}>
-                    {EducationLineitems?.[items - 1]?.label},{" "}
-                  </Text>
-                ))
-              )
-            ) : null
-          }
-        />
-        <Text
-          style={{
-            color: COLORS.TextBlack,
-            marginTop: RFValue(6),
-            fontWeight: "600",
-          }}
-        >
-          Qualification :
-        </Text>
-        <DropDownPicker
-          listMode="SCROLLVIEW"
-          scrollViewProps={{ nestedScrollEnabled: true }}
-          open={Qualificationopen}
-          value={Qualificationvalue}
-          items={Qualificationitems}
-          dropDownDirection="BOTTOM"
-          placeholder="Select Qualification (Single)"
-          placeholderStyle={{
-            color: COLORS.SperatorColor,
-            fontWeight: "500",
-          }}
-          setOpen={() => setDropdownOpenFunction(6)}
-          setValue={setQualificationValue}
-          listItemLabelStyle={{ color: COLORS.Black }}
-          style={{
-            marginVertical: width * 0.02,
-            borderWidth: 0,
-            elevation: 4,
-            zIndex: 994,
-          }}
-          dropDownContainerStyle={styles.dropDownContainerStyle}
-          setItems={setItems}
-        />
-        <Text
-          style={{
-            color: COLORS.TextBlack,
-            marginTop: RFValue(6),
-            fontWeight: "600",
-          }}
-        >
-          Additional Skills :
-        </Text>
-        <DropDownPicker
-          max={3}
-          multiple={true}
-          listMode="SCROLLVIEW"
-          scrollViewProps={{ nestedScrollEnabled: true }}
-          open={AddSkillsopen}
-          value={AddSkillsvalue}
-          items={AddSkillsitems}
-          dropDownDirection="BOTTOM"
-          placeholder="Select Skills ( Max 3)"
-          placeholderStyle={{
-            color: COLORS.SperatorColor,
-            fontWeight: "500",
-          }}
-          setOpen={() => setDropdownOpenFunction(7)}
-          setValue={setAddSkillsValue}
-          listItemLabelStyle={{ color: COLORS.Black }}
-          style={{
-            marginVertical: width * 0.02,
-            borderWidth: 0,
-            elevation: 4,
-            zIndex: 993,
-          }}
-          dropDownContainerStyle={styles.dropDownContainerStyle}
-          setItems={setItems}
-        />
-        <FlatList
-          data={[1]}
-          keyExtractor={(item) => item}
-          renderItem={({ item, index }) =>
-            AddSkillsvalue != null ? (
-              typeof AddSkillsvalue == "number" ? (
-                <Text style={styles.itemText}>
-                  {AddSkillsitems[AddSkillsvalue - 1].label},{" "}
-                </Text>
-              ) : (
-                AddSkillsvalue.map((items, indexx) => (
-                  <Text style={styles.itemText}>
-                    {AddSkillsitems?.[items - 1]?.label},{" "}
-                  </Text>
-                ))
-              )
-            ) : null
-          }
-        />
-        <Text
-          style={{
-            color: COLORS.TextBlack,
-            marginTop: RFValue(6),
-            fontWeight: "600",
-          }}
-        >
-          Work Experience Years :
-        </Text>
-        <DropDownPicker
-          listMode="SCROLLVIEW"
-          scrollViewProps={{ nestedScrollEnabled: true }}
-          open={WorkExperienceopen}
-          value={WorkExperiencevalue}
-          items={WorkExperienceitems}
-          dropDownDirection="BOTTOM"
-          placeholder="Select Experience (Single)"
-          placeholderStyle={{
-            color: COLORS.SperatorColor,
-            fontWeight: "500",
-          }}
-          setOpen={() => setDropdownOpenFunction(8)}
-          setValue={setWorkExperienceValue}
-          listItemLabelStyle={{ color: COLORS.Black }}
-          style={{
-            marginVertical: width * 0.02,
-            borderWidth: 0,
-            elevation: 4,
-            zIndex: 992,
-          }}
-          dropDownContainerStyle={styles.dropDownContainerStyle}
-        />
-        <Text
-          style={{
-            color: COLORS.TextBlack,
-            marginTop: RFValue(6),
-            fontWeight: "600",
-          }}
-        >
-          NO. of Vacancies :
-        </Text>
-        <DropDownPicker
-          listMode="SCROLLVIEW"
-          scrollViewProps={{ nestedScrollEnabled: true }}
-          open={Vaccanciesopen}
-          value={Vaccanciesvalue}
-          items={Vaccanciesitems}
-          dropDownDirection="BOTTOM"
-          placeholder="10 (Single)"
-          placeholderStyle={{
-            color: COLORS.SperatorColor,
-            fontWeight: "500",
-          }}
-          setOpen={() => setDropdownOpenFunction(9)}
-          setValue={setVaccanciesValue}
-          listItemLabelStyle={{ color: COLORS.Black }}
-          style={{
-            marginVertical: width * 0.02,
-            borderWidth: 0,
-            elevation: 4,
-            zIndex: 991,
-          }}
-          dropDownContainerStyle={styles.dropDownContainerStyle}
-          setItems={setItems}
-        />
-        <Text
-          style={{
-            color: COLORS.TextBlack,
-            marginTop: RFValue(6),
-            fontWeight: "600",
-          }}
-        >
-          Age Group :
-        </Text>
-        <DropDownPicker
-          listMode="SCROLLVIEW"
-          scrollViewProps={{ nestedScrollEnabled: true }}
-          open={AgeListopen}
-          value={AgeListvalue}
-          items={AgeListitems}
-          dropDownDirection="BOTTOM"
-          placeholder="Select Age Group"
-          placeholderStyle={{
-            color: COLORS.SperatorColor,
-            fontWeight: "500",
-          }}
-          setOpen={() => setDropdownOpenFunction(10)}
-          setValue={setAgeListValue}
-          listItemLabelStyle={{ color: COLORS.Black }}
-          style={{
-            marginVertical: width * 0.02,
-            borderWidth: 0,
-            elevation: 4,
-            zIndex: 990,
-          }}
-          dropDownContainerStyle={styles.dropDownContainerStyle}
-          setItems={setItems}
-        />
-        <Text
-          style={{
-            color: COLORS.TextBlack,
-            marginTop: RFValue(6),
-            fontWeight: "600",
-          }}
-        >
-          Work Place :
-        </Text>
-        <DropDownPicker
-          listMode="SCROLLVIEW"
-          scrollViewProps={{ nestedScrollEnabled: true }}
-          open={WorkPlaceopen}
-          value={WorkPlacevalue}
-          items={WorkPlaceitems}
-          dropDownDirection="BOTTOM"
-          placeholder="Select Work Place"
-          placeholderStyle={{
-            color: COLORS.SperatorColor,
-            fontWeight: "500",
-          }}
-          setOpen={() => setDropdownOpenFunction(11)}
-          setValue={setWorkPlaceValue}
-          listItemLabelStyle={{ color: COLORS.Black }}
-          style={{
-            marginVertical: width * 0.02,
-            borderWidth: 0,
-            elevation: 4,
-            zIndex: 989,
-          }}
-          dropDownContainerStyle={styles.dropDownContainerStyle}
-          setItems={setItems}
-        />
-        <Text
-          style={{
-            color: COLORS.TextBlack,
-            marginTop: RFValue(6),
-            fontWeight: "600",
-          }}
-        >
-          Salary Range :
-        </Text>
-        <DropDownPicker
-          listMode="SCROLLVIEW"
-          scrollViewProps={{ nestedScrollEnabled: true }}
-          open={SalaryRangeopen}
-          value={SalaryRangevalue}
-          items={SalaryRangeitems}
-          dropDownDirection="BOTTOM"
-          placeholder="Select Range"
-          placeholderStyle={{
-            color: COLORS.SperatorColor,
-            fontWeight: "500",
-          }}
-          setOpen={() => setDropdownOpenFunction(12)}
-          setValue={setSalaryRangeValue}
-          listItemLabelStyle={{ color: COLORS.Black }}
-          style={{
-            marginVertical: width * 0.02,
-            borderWidth: 0,
-            elevation: 4,
-            zIndex: 988,
-          }}
-          dropDownContainerStyle={styles.dropDownContainerStyle}
-          setItems={setItems}
-        />
-        <Text
-          style={{
-            color: COLORS.TextBlack,
-            marginTop: RFValue(6),
-            fontWeight: "600",
-          }}
-        >
-          Locality :
-        </Text>
-        <DropDownPicker
-          listMode="SCROLLVIEW"
-          scrollViewProps={{ nestedScrollEnabled: true }}
-          open={Localityopen}
-          value={Localityvalue}
-          items={Localityitems}
-          dropDownDirection="BOTTOM"
-          placeholder="Select Locality"
-          placeholderStyle={{
-            color: COLORS.SperatorColor,
-            fontWeight: "500",
-          }}
-          setOpen={() => setDropdownOpenFunction(13)}
-          setValue={setLocalityValue}
-          listItemLabelStyle={{ color: COLORS.Black }}
-          style={{
-            marginVertical: width * 0.02,
-            borderWidth: 0,
-            elevation: 4,
-            zIndex: 987,
-          }}
-          dropDownContainerStyle={styles.dropDownContainerStyle}
-          setItems={setItems}
-        />
-        <Text
-          style={{
-            color: COLORS.TextBlack,
-            marginTop: RFValue(6),
-            fontWeight: "600",
-          }}
-        >
-          Additional Facilities :
-        </Text>
-        <DropDownPicker
-          listMode="SCROLLVIEW"
-          scrollViewProps={{ nestedScrollEnabled: true }}
-          multiple={true}
-          open={AdditionalFacilityopen}
-          value={AdditionalFacilityvalue}
-          items={AdditionalFacilityitems}
-          dropDownDirection="BOTTOM"
-          placeholder="Select Additional Facilites (Multiple Allowed)"
-          placeholderStyle={{
-            color: COLORS.SperatorColor,
-            fontWeight: "500",
-          }}
-          setOpen={() => setDropdownOpenFunction(14)}
-          setValue={setAdditionalFacilityValue}
-          listItemLabelStyle={{ color: COLORS.Black }}
-          style={{
-            marginVertical: width * 0.02,
-            borderWidth: 0,
-            elevation: 4,
-            zIndex: 986,
-          }}
-          dropDownContainerStyle={styles.dropDownContainerStyle}
-          setItems={setItems}
-        />
-        <FlatList
-          data={[1]}
-          keyExtractor={(item) => item}
-          renderItem={({ item, index }) =>
-            AdditionalFacilityvalue != null ? (
-              typeof AdditionalFacilityvalue == "number" ? (
-                <Text style={styles.itemText}>
-                  {AdditionalFacilityitems[AdditionalFacilityvalue - 4].label},{" "}
-                </Text>
-              ) : (
-                AdditionalFacilityvalue.map((items, indexx) => (
-                  <Text style={styles.itemText}>
-                    {AdditionalFacilityitems?.[items - 4]?.label},{" "}
-                  </Text>
-                ))
-              )
-            ) : null
-          }
-        />
-        <Text
-          style={{
-            color: COLORS.TextBlack,
-            marginTop: RFValue(6),
+            marginTop: RFValue(10),
             fontWeight: "600",
           }}
         >
@@ -999,8 +1021,10 @@ const PostJob = () => {
           value={CandidateMessagevalue}
           onChange={(text) => setCandidateMessagevalue(text)}
           placeholderTextColor={COLORS.SperatorColor}
+          textAlignVertical="top"
           style={{
             width: "100%",
+            height: RFValue(130),
             marginVertical: width * 0.02,
             borderWidth: 1,
             borderColor: COLORS.SperatorColor,
@@ -1011,19 +1035,16 @@ const PostJob = () => {
           }}
           placeholder="Enter Candidate Message"
         />
-
         <Text
           style={{
             color: COLORS.TextBlack,
             marginTop: RFValue(6),
             fontSize: RFValue(10),
+            textAlign: "left",
           }}
         >
-          On Click of Pay & Submit, You will be redirected to payments page to
-          pay .. amount to make your job post active. This job post will be
-          available for x days.
+          {`On Click of Pay & Submit, You will be redirected to payments page to pay ₹${sbscriptionAmount} to make your job post active. This job post will be available for ${sbscriptionInDayes} days.\nThe best match from our database as soon as we have your required service provider`}
         </Text>
-
         <TouchableOpacity
           onPress={() => CheckValidation()}
           style={{

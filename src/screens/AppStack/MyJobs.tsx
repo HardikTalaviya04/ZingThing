@@ -227,6 +227,30 @@ export default function MyJobs() {
             } of exp`}
           </Text>
         </View>
+        <TouchableOpacity
+          onPress={() =>
+            navigation.navigate(SCREENS.PostJob, { MainItem: item })
+          }
+          style={{
+            alignSelf: "flex-end",
+            marginRight: RFValue(15),
+            marginTop: RFValue(10),
+            backgroundColor: isExpired ? COLORS.Red : COLORS.PrimeryColor,
+            paddingHorizontal: RFValue(15),
+            paddingVertical: RFValue(4),
+            borderRadius: RFValue(4),
+          }}
+        >
+          <Text
+            style={{
+              color: COLORS.White,
+              fontSize: RFValue(12),
+              fontWeight: "bold",
+            }}
+          >
+            {isExpired ? "Renew" : "Edit"}
+          </Text>
+        </TouchableOpacity>
       </View>
     );
   };

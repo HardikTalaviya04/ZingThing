@@ -25,6 +25,7 @@ import RazorpayCheckout from "react-native-razorpay";
 import RNFetchBlob from "rn-fetch-blob";
 import { check, request, PERMISSIONS, RESULTS } from "react-native-permissions";
 import { Linking } from "react-native";
+import moment from "moment";
 
 export default function NewsFeed() {
   const [screenState, setscreenState] = useState(0);
@@ -190,10 +191,9 @@ export default function NewsFeed() {
         name: data.name,
       });
       Fdata.append("vendor_id", "1");
-      Fdata.append("create_date", "15/06/2024");
-      Fdata.append("expire_date", "16/06/2024");
+      Fdata.append("create_date", moment().format("DD/MM/YYYY"));
+      Fdata.append("expire_date", moment().add(1, "days").format("DD/MM/YYYY"));
       Fdata.append("paid", "Yes");
-      console.log("hardik", data.uri, data.type, data.name, Fdata);
 
       const response = await fetch(
         "https://zingthing.ptechwebs.com/api/newsfeeds-add",
