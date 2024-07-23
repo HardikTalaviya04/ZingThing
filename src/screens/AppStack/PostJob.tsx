@@ -4,6 +4,7 @@ import {
   StyleSheet,
   Text,
   TextInput,
+  ToastAndroid,
   TouchableOpacity,
   View,
 } from "react-native";
@@ -25,6 +26,7 @@ import moment from "moment";
 
 const PostJob = ({ route }: any) => {
   const NavData = route?.params?.MainItem ? route?.params?.MainItem : null;
+  console.log("NavData", NavData);
   const navigation = useNavigation();
   const pickerRef = useRef();
   const [selectedLanguage, setSelectedLanguage] = useState();
@@ -305,26 +307,43 @@ const PostJob = ({ route }: any) => {
   const onSubmit = async () => {
     try {
       const data = new FormData();
-      data.append("job_post_date", "2024-07-11");
+      data.append("job_post_date", moment().format("YYYY-MM-DD"));
       data.append("vendor_id", "1");
       data.append("job_title_id", JobTitlevalue);
       data.append("business_id", BusinnesTypevalue ? BusinnesTypevalue : "");
-      data.append("working_time_id", WorkingTimevalue);
-      data.append("gender_id", GenderListvalue);
-      data.append("line_of_educations_ids", EducationLinevalue);
-      data.append("qualification_id", Qualificationvalue);
-      data.append("skill_id", AddSkillsvalue);
-      data.append("experience_id", WorkExperiencevalue);
-      data.append("quantity_id", Vaccanciesvalue);
-      data.append("age_group_id", AgeListvalue);
-      data.append("localilty_id", Localityvalue);
-      data.append("environment_to_work_id", WorkPlacevalue);
-      data.append("place_of_posting", "sample");
-      data.append("salary_range_id", SalaryRangevalue);
-      data.append("facility_ids", AdditionalFacilityvalue);
-      data.append("job_type_id", value);
+      data.append("working_time_id", WorkingTimevalue ? WorkingTimevalue : "");
+      data.append("gender_id", GenderListvalue ? GenderListvalue : "");
+      data.append(
+        "line_of_educations_ids",
+        EducationLinevalue ? EducationLinevalue : ""
+      );
+      data.append(
+        "qualification_id",
+        Qualificationvalue ? Qualificationvalue : ""
+      );
+      data.append("skill_id", AddSkillsvalue ? AddSkillsvalue : "");
+      data.append(
+        "experience_id",
+        WorkExperiencevalue ? WorkExperiencevalue : ""
+      );
+      data.append("quantity_id", Vaccanciesvalue ? Vaccanciesvalue : "");
+      data.append("age_group_id", AgeListvalue ? AgeListvalue : "");
+      data.append("localilty_id", Localityvalue ? Localityvalue : "");
+      data.append(
+        "environment_to_work_id",
+        WorkPlacevalue ? WorkPlacevalue : ""
+      );
+      data.append("place_of_posting", "Ahmedabad");
+      data.append("salary_range_id", SalaryRangevalue ? SalaryRangevalue : "");
+      data.append(
+        "facility_ids",
+        AdditionalFacilityvalue ? AdditionalFacilityvalue : ""
+      );
+      data.append("job_type_id", value ? value : "");
       data.append("job_post_subscription_id", "1");
-      data.append("job_search_subscription_id", "1");
+      data.append("message", CandidateMessagevalue);
+
+      console.log("datadatadatadata", data);
 
       const response = await fetch(
         "https://zingthing.ptechwebs.com/api/jobpost-add",
@@ -345,7 +364,7 @@ const PostJob = ({ route }: any) => {
       console.log(json);
       Alert.alert(
         "CONGRATULATIONS",
-        `YOUR REQUEST FOR JOB POST WITH NUMBER ${sbscriptionDayes} IS POSTED SUCCESSFULLY AND YOU WILL RECEIVE THE UPDATE NOTIFICATION IN CASE ANY CANDIDATE FITS YOUR JOB POST. YOUR JOB POST WILL REMAIN LIVE TILL ${sbscriptionDayes}. FOR ANY FURTHER ASSISTANCE, PLEASE CONTACT US ON 9723233194 / 9737333194 / 9824333194 / 9979333194 WITH YOUR JOB POST NUMBER.`,
+        `YOUR REQUEST FOR JOB POST WITH NUMBER ${json?.data?.job_post_id} IS POSTED SUCCESSFULLY AND YOU WILL RECEIVE THE UPDATE NOTIFICATION IN CASE ANY CANDIDATE FITS YOUR JOB POST. YOUR JOB POST WILL REMAIN LIVE TILL ${sbscriptionDayes}. FOR ANY FURTHER ASSISTANCE, PLEASE CONTACT US ON 9723233194 / 9737333194 / 9824333194 / 9979333194 WITH YOUR JOB POST NUMBER.`,
         [
           {
             text: "OK",
@@ -414,7 +433,7 @@ const PostJob = ({ route }: any) => {
           value={value}
           placeholder="Select Job Type (Single)"
           placeholderStyle={{
-            color: COLORS.SperatorColor,
+            color: COLORS.extraLightBlack,
             fontWeight: "500",
           }}
           items={items}
@@ -444,12 +463,13 @@ const PostJob = ({ route }: any) => {
           Job Title :
         </Text>
         <DropDownPicker
+          searchable={true}
+          listMode="MODAL"
           open={JobTitleopen}
-          listMode="SCROLLVIEW"
           scrollViewProps={{ nestedScrollEnabled: true }}
           placeholder="Select Job Title (Single)"
           placeholderStyle={{
-            color: COLORS.SperatorColor,
+            color: COLORS.extraLightBlack,
             fontWeight: "500",
           }}
           value={JobTitlevalue}
@@ -481,14 +501,25 @@ const PostJob = ({ route }: any) => {
               Business Type :
             </Text>
             <DropDownPicker
+              listMode="MODAL"
+              searchable={true}
               max={5}
               multiple={true}
-              listMode="SCROLLVIEW"
+              onSelectItem={(i) =>
+                i.length == 5
+                  ? setBusinnesTypeOpen(false)
+                  : i.length > 5
+                  ? ToastAndroid.show(
+                      "You can select maximum 5 items",
+                      ToastAndroid.SHORT
+                    )
+                  : null
+              }
               scrollViewProps={{ nestedScrollEnabled: true }}
               open={BusinnesTypeopen}
               placeholder="Select Business Type ( Max 5)"
               placeholderStyle={{
-                color: COLORS.SperatorColor,
+                color: COLORS.extraLightBlack,
                 fontWeight: "500",
               }}
               value={BusinnesTypevalue}
@@ -536,14 +567,13 @@ const PostJob = ({ route }: any) => {
               Job Time/Working Time :
             </Text>
             <DropDownPicker
-              multiple={true}
               listMode="SCROLLVIEW"
               scrollViewProps={{ nestedScrollEnabled: true }}
               open={WorkingTimeopen}
               value={WorkingTimevalue}
-              placeholder="Select Time ( Multiple)"
+              placeholder="Select Time ( Single )"
               placeholderStyle={{
-                color: COLORS.SperatorColor,
+                color: COLORS.extraLightBlack,
                 fontWeight: "500",
               }}
               items={WorkingTimeitems}
@@ -558,26 +588,6 @@ const PostJob = ({ route }: any) => {
               }}
               dropDownContainerStyle={styles.dropDownContainerStyle}
               setItems={setItems}
-            />
-            <FlatList
-              data={[1]}
-              horizontal={true}
-              keyExtractor={(item) => item}
-              renderItem={({ item, index }) =>
-                WorkingTimevalue != null ? (
-                  typeof WorkingTimevalue == "number" ? (
-                    <Text style={styles.itemText}>
-                      {WorkingTimeitems[WorkingTimevalue - 1].label},{" "}
-                    </Text>
-                  ) : (
-                    WorkingTimevalue.map((items, indexx) => (
-                      <Text style={styles.itemText}>
-                        {WorkingTimeitems?.[items - 1]?.label},{" "}
-                      </Text>
-                    ))
-                  )
-                ) : null
-              }
             />
             <Text
               style={{
@@ -597,7 +607,7 @@ const PostJob = ({ route }: any) => {
               setOpen={() => setDropdownOpenFunction(4)}
               placeholder="Select Gender (Single)"
               placeholderStyle={{
-                color: COLORS.SperatorColor,
+                color: COLORS.extraLightBlack,
                 fontWeight: "500",
               }}
               setValue={setGenderListValue}
@@ -623,15 +633,26 @@ const PostJob = ({ route }: any) => {
             </Text>
             <DropDownPicker
               max={3}
+              onSelectItem={(i) =>
+                i.length == 3
+                  ? setEducationLineOpen(false)
+                  : i.length > 3
+                  ? ToastAndroid.show(
+                      "You can select maximum 3 items",
+                      ToastAndroid.SHORT
+                    )
+                  : null
+              }
               multiple={true}
-              listMode="SCROLLVIEW"
+              searchable={true}
+              listMode="MODAL"
               scrollViewProps={{ nestedScrollEnabled: true }}
               open={EducationLineopen}
               value={EducationLinevalue}
               dropDownDirection="BOTTOM"
               placeholder="Select Education ( Max 3)"
               placeholderStyle={{
-                color: COLORS.SperatorColor,
+                color: COLORS.extraLightBlack,
                 fontWeight: "500",
               }}
               items={EducationLineitems}
@@ -675,7 +696,8 @@ const PostJob = ({ route }: any) => {
               Qualification :
             </Text>
             <DropDownPicker
-              listMode="SCROLLVIEW"
+              listMode="MODAL"
+              searchable={true}
               scrollViewProps={{ nestedScrollEnabled: true }}
               open={Qualificationopen}
               value={Qualificationvalue}
@@ -683,7 +705,7 @@ const PostJob = ({ route }: any) => {
               dropDownDirection="BOTTOM"
               placeholder="Select Qualification (Single)"
               placeholderStyle={{
-                color: COLORS.SperatorColor,
+                color: COLORS.extraLightBlack,
                 fontWeight: "500",
               }}
               setOpen={() => setDropdownOpenFunction(6)}
@@ -710,7 +732,18 @@ const PostJob = ({ route }: any) => {
             <DropDownPicker
               max={3}
               multiple={true}
-              listMode="SCROLLVIEW"
+              listMode="MODAL"
+              searchable={true}
+              onSelectItem={(i) =>
+                i.length == 3
+                  ? setAddSkillsOpen(false)
+                  : i.length > 3
+                  ? ToastAndroid.show(
+                      "You can select maximum 3 items",
+                      ToastAndroid.SHORT
+                    )
+                  : null
+              }
               scrollViewProps={{ nestedScrollEnabled: true }}
               open={AddSkillsopen}
               value={AddSkillsvalue}
@@ -718,7 +751,7 @@ const PostJob = ({ route }: any) => {
               dropDownDirection="BOTTOM"
               placeholder="Select Skills ( Max 3)"
               placeholderStyle={{
-                color: COLORS.SperatorColor,
+                color: COLORS.extraLightBlack,
                 fontWeight: "500",
               }}
               setOpen={() => setDropdownOpenFunction(7)}
@@ -762,7 +795,8 @@ const PostJob = ({ route }: any) => {
               Work Experience Years :
             </Text>
             <DropDownPicker
-              listMode="SCROLLVIEW"
+              listMode="MODAL"
+              searchable={true}
               scrollViewProps={{ nestedScrollEnabled: true }}
               open={WorkExperienceopen}
               value={WorkExperiencevalue}
@@ -770,7 +804,7 @@ const PostJob = ({ route }: any) => {
               dropDownDirection="BOTTOM"
               placeholder="Select Experience (Single)"
               placeholderStyle={{
-                color: COLORS.SperatorColor,
+                color: COLORS.extraLightBlack,
                 fontWeight: "500",
               }}
               setOpen={() => setDropdownOpenFunction(8)}
@@ -802,7 +836,7 @@ const PostJob = ({ route }: any) => {
               dropDownDirection="BOTTOM"
               placeholder="10 (Single)"
               placeholderStyle={{
-                color: COLORS.SperatorColor,
+                color: COLORS.extraLightBlack,
                 fontWeight: "500",
               }}
               setOpen={() => setDropdownOpenFunction(9)}
@@ -827,7 +861,7 @@ const PostJob = ({ route }: any) => {
               Age Group :
             </Text>
             <DropDownPicker
-              listMode="SCROLLVIEW"
+              listMode="MODAL"
               scrollViewProps={{ nestedScrollEnabled: true }}
               open={AgeListopen}
               value={AgeListvalue}
@@ -835,7 +869,7 @@ const PostJob = ({ route }: any) => {
               dropDownDirection="BOTTOM"
               placeholder="Select Age Group"
               placeholderStyle={{
-                color: COLORS.SperatorColor,
+                color: COLORS.extraLightBlack,
                 fontWeight: "500",
               }}
               setOpen={() => setDropdownOpenFunction(10)}
@@ -868,7 +902,7 @@ const PostJob = ({ route }: any) => {
               dropDownDirection="BOTTOM"
               placeholder="Select Work Place"
               placeholderStyle={{
-                color: COLORS.SperatorColor,
+                color: COLORS.extraLightBlack,
                 fontWeight: "500",
               }}
               setOpen={() => setDropdownOpenFunction(11)}
@@ -893,7 +927,7 @@ const PostJob = ({ route }: any) => {
               Salary Range :
             </Text>
             <DropDownPicker
-              listMode="SCROLLVIEW"
+              listMode="MODAL"
               scrollViewProps={{ nestedScrollEnabled: true }}
               open={SalaryRangeopen}
               value={SalaryRangevalue}
@@ -901,7 +935,7 @@ const PostJob = ({ route }: any) => {
               dropDownDirection="BOTTOM"
               placeholder="Select Range"
               placeholderStyle={{
-                color: COLORS.SperatorColor,
+                color: COLORS.extraLightBlack,
                 fontWeight: "500",
               }}
               setOpen={() => setDropdownOpenFunction(12)}
@@ -934,7 +968,7 @@ const PostJob = ({ route }: any) => {
               dropDownDirection="BOTTOM"
               placeholder="Select Locality"
               placeholderStyle={{
-                color: COLORS.SperatorColor,
+                color: COLORS.extraLightBlack,
                 fontWeight: "500",
               }}
               setOpen={() => setDropdownOpenFunction(13)}
@@ -959,7 +993,12 @@ const PostJob = ({ route }: any) => {
               Additional Facilities :
             </Text>
             <DropDownPicker
-              listMode="SCROLLVIEW"
+              searchable={true}
+              listMode="MODAL"
+              onSelectItem={(i) =>
+                i.length == AdditionalFacilityitems.length &&
+                setAdditionalFacilityOpen(false)
+              }
               scrollViewProps={{ nestedScrollEnabled: true }}
               multiple={true}
               open={AdditionalFacilityopen}
@@ -968,7 +1007,7 @@ const PostJob = ({ route }: any) => {
               dropDownDirection="BOTTOM"
               placeholder="Select Additional Facilites (Multiple Allowed)"
               placeholderStyle={{
-                color: COLORS.SperatorColor,
+                color: COLORS.extraLightBlack,
                 fontWeight: "500",
               }}
               setOpen={() => setDropdownOpenFunction(14)}
@@ -1019,7 +1058,7 @@ const PostJob = ({ route }: any) => {
         </Text>
         <TextInput
           value={CandidateMessagevalue}
-          onChange={(text) => setCandidateMessagevalue(text)}
+          onChangeText={(i) => setCandidateMessagevalue(i)}
           placeholderTextColor={COLORS.SperatorColor}
           textAlignVertical="top"
           style={{
@@ -1043,7 +1082,7 @@ const PostJob = ({ route }: any) => {
             textAlign: "left",
           }}
         >
-          {`On Click of Pay & Submit, You will be redirected to payments page to pay ₹${sbscriptionAmount} to make your job post active. This job post will be available for ${sbscriptionInDayes} days.\nThe best match from our database as soon as we have your required service provider`}
+          {`On Posting Job/Service and on making Payment, you agree to our terms and conditions to get the notifications for the best match available in our database. Your post will remain live for 15 days and you will receive the notifications for the candidate/service seeker available in our database. By sending notifications for the match as per your requirements, we are exchanging the data only and we do not undertake any responsibility of quality the candidate/service seeker will get. We advise you to verify the match before you work with them`}
         </Text>
         <TouchableOpacity
           onPress={() => CheckValidation()}

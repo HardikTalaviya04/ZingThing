@@ -170,7 +170,8 @@ export default function NewsFeed() {
       );
       const json = await response.json();
       console.log("object", json);
-      setMainData(json.data);
+      const reversedData = [...json.data].reverse();
+      setMainData(reversedData);
     } catch (error) {
       // setError(error);
     } finally {
@@ -194,6 +195,7 @@ export default function NewsFeed() {
       Fdata.append("create_date", moment().format("DD/MM/YYYY"));
       Fdata.append("expire_date", moment().add(1, "days").format("DD/MM/YYYY"));
       Fdata.append("paid", "Yes");
+      Fdata.append("news_feeds_subscription_id", "1");
 
       const response = await fetch(
         "https://zingthing.ptechwebs.com/api/newsfeeds-add",
@@ -207,15 +209,16 @@ export default function NewsFeed() {
       );
 
       if (!response.ok) {
+        console.log("ERROR: ", response);
         throw new Error("Network response was not ok");
       }
 
       const json = await response.json();
-      console.log("hardik", json);
+      console.log("object", json);
       fetchData();
       setscreenState(1);
       // setResponseMessage(json.message);
-      Alert.alert("Success", "Data posted successfully");
+      // Alert.alert("Success", "Data posted successfully");
     } catch (error) {
       console.log("--error--", error);
       // setResponseMessage(error.message);
