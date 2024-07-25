@@ -111,7 +111,8 @@ const PostJob = ({ route }: any) => {
   const [AdditionalFacilityvalue, setAdditionalFacilityValue] = useState(null);
   const [AdditionalFacilityitems, setAdditionalFacilityItems] = useState([]);
 
-  const [CandidateMessagevalue, setCandidateMessagevalue] = useState("");
+  const [CandidateMessagevalue, setCandidateMessagevalue] = useState(
+    NavData ? NavData?.message : '');
 
   const [sbscriptionAmount, setSbscriptionAmount] = useState(50);
   const [sbscriptionDayes, setSbscriptionDayes] = useState(10);

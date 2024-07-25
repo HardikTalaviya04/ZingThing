@@ -53,7 +53,7 @@ export default function NewsFeed() {
     RazorpayCheckout.open(options)
       .then((data) => {
         // handle success
-        Alert.alert(`Success: ${data.razorpay_payment_id}`);
+        // Alert.alert(`Success: ${data.razorpay_payment_id}`);
         pickDocument();
       })
       .catch((error) => {

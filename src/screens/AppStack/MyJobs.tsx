@@ -32,6 +32,31 @@ export default function MyJobs() {
   const navigation = useNavigation();
   const focus = useIsFocused();
 
+
+  const GetCandidateList=async(details)=>{
+    console.log('--candidate-list--',details)
+    try {
+      details.map(async(ele)=>{
+        console.log('--inside-Candidate-list--',ele.id)
+        const response = await fetch(
+          `https://zingthing.ptechwebs.com/api/available-candiates-list/${ele.id}`
+        );
+        const json = await response.json();
+        if(json.data.length!=0)
+        {
+          console.log('--INSIDE_DAADADA--',json)
+          {json.data&&mainDataForSecoend.push(json.data)}
+        }
+        // setMainDataForSecoend([mainDataForSecoend,...json.data]);
+        setisLoading(false);
+      })
+    } catch (error) {
+      // setError(error);
+    } finally {
+      // setLoading(false);
+    }
+  }
+
   const fetchData = async () => {
     try {
       const response = await fetch(
@@ -41,20 +66,8 @@ export default function MyJobs() {
       const json = await response.json();
       const reversedData = [...json.data].reverse();
       setMainDataForFirst(reversedData);
+      GetCandidateList(reversedData)
       console.log("reversedData", reversedData);
-    } catch (error) {
-      // setError(error);
-    } finally {
-      // setLoading(false);
-    }
-    try {
-      const response = await fetch(
-        // "https://zingthing.ptechwebs.com/api/jobpost/1"
-        "https://zingthing.ptechwebs.com/api/available-candiates-list/8"
-      );
-      const json = await response.json();
-      setMainDataForSecoend(json.data);
-      setisLoading(false);
     } catch (error) {
       // setError(error);
     } finally {
@@ -222,9 +235,9 @@ export default function MyJobs() {
             }}
           >
             {/* Hiring a account manager with 2+ yrs exp */}
-            {`Hiring a ${item?.job_title?.toLowerCase()} with ${
-              item.experience
-            } of exp`}
+            {item?.job_title?.toLowerCase()}{
+              item?.experience
+            }
           </Text>
         </View>
         <TouchableOpacity
@@ -255,6 +268,7 @@ export default function MyJobs() {
     );
   };
   const renderItemForSecoend = ({ item }) => {
+    console.log('--Available-Candidates--',item)
     return (
       <View
         style={{
@@ -276,18 +290,18 @@ export default function MyJobs() {
       >
         <View>
           <Text style={[styles.secoendListBoxText, { paddingTop: RFValue(8) }]}>
-            Candiate Name : {item.name}
+            Candiate Name : {item?.name}
           </Text>
-          <Text style={styles.secoendListBoxText}>Location : {item.city}</Text>
+          <Text style={styles.secoendListBoxText}>Location : {item?.city}</Text>
           <Text style={styles.secoendListBoxText}>
-            Experience : {(item?.job_posts?.experience).toLowerCase()} of Exp
+            Experience : {(item?.job_posts?.experience)?.toLowerCase()} of Exp
           </Text>
           <Text
             style={[styles.secoendListBoxText, { paddingBottom: RFValue(8) }]}
           >
             Salary Expected :{"₹ "}
-            {item.job_posts.salary_range
-              ? item.job_posts.salary_range
+            {item?.job_posts?.salary_range
+              ? item?.job_posts?.salary_range
               : "₹ 10000+"}
           </Text>
         </View>
