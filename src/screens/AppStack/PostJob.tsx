@@ -32,14 +32,13 @@ const PostJob = ({ route }: any) => {
   const [selectedLanguage, setSelectedLanguage] = useState();
 
   const [open, setOpen] = useState(false);
-  const [value, setValue] = useState(null);
-  const [items, setItems] = useState([
-    { label: "Single Job/Service", value: "1" },
-    { label: "Employment", value: "2" },
-  ]);
+  const [value, setValue] = useState(NavData ? NavData.job_type_id : null);
+  const [items, setItems] = useState([]);
 
   const [JobTitleopen, setJobTitleOpen] = useState(false);
-  const [JobTitlevalue, setJobTitleValue] = useState(null);
+  const [JobTitlevalue, setJobTitleValue] = useState(
+    NavData ? NavData.job_title_id : null
+  );
   const [JobTitleitems, setJobTitleItems] = useState([]);
 
   const [BusinnesTypeopen, setBusinnesTypeOpen] = useState(false);
@@ -47,11 +46,15 @@ const PostJob = ({ route }: any) => {
   const [BusinnesTypeitems, setBusinnesTypeItems] = useState([]);
 
   const [WorkingTimeopen, setWorkingTimeOpen] = useState(false);
-  const [WorkingTimevalue, setWorkingTimeValue] = useState(null);
+  const [WorkingTimevalue, setWorkingTimeValue] = useState(
+    NavData ? NavData.working_time_id : null
+  );
   const [WorkingTimeitems, setWorkingTimeItems] = useState([]);
 
   const [GenderListopen, setGenderListOpen] = useState(false);
-  const [GenderListvalue, setGenderListValue] = useState(null);
+  const [GenderListvalue, setGenderListValue] = useState(
+    NavData ? NavData.gender_id : null
+  );
   const [GenderListitems, setGenderListItems] = useState([]);
 
   const [EducationLineopen, setEducationLineOpen] = useState(false);
@@ -59,7 +62,9 @@ const PostJob = ({ route }: any) => {
   const [EducationLineitems, setEducationLineItems] = useState([]);
 
   const [Qualificationopen, setQualificationOpen] = useState(false);
-  const [Qualificationvalue, setQualificationValue] = useState(null);
+  const [Qualificationvalue, setQualificationValue] = useState(
+    NavData ? NavData.qualification_id : null
+  );
   const [Qualificationitems, setQualificationItems] = useState([]);
 
   const [AddSkillsopen, setAddSkillsOpen] = useState(false);
@@ -67,27 +72,39 @@ const PostJob = ({ route }: any) => {
   const [AddSkillsitems, setAddSkillsItems] = useState([]);
 
   const [WorkExperienceopen, setWorkExperienceOpen] = useState(false);
-  const [WorkExperiencevalue, setWorkExperienceValue] = useState(null);
+  const [WorkExperiencevalue, setWorkExperienceValue] = useState(
+    NavData ? NavData.experience_id : null
+  );
   const [WorkExperienceitems, setWorkExperienceItems] = useState([]);
 
   const [Vaccanciesopen, setVaccanciesOpen] = useState(false);
-  const [Vaccanciesvalue, setVaccanciesValue] = useState(null);
+  const [Vaccanciesvalue, setVaccanciesValue] = useState(
+    NavData ? NavData.quantity_id : null
+  );
   const [Vaccanciesitems, setVaccanciesItems] = useState([]);
 
   const [AgeListopen, setAgeListOpen] = useState(false);
-  const [AgeListvalue, setAgeListValue] = useState(null);
+  const [AgeListvalue, setAgeListValue] = useState(
+    NavData ? NavData.age_group_id : null
+  );
   const [AgeListitems, setAgeListItems] = useState([]);
 
   const [WorkPlaceopen, setWorkPlaceOpen] = useState(false);
-  const [WorkPlacevalue, setWorkPlaceValue] = useState(null);
+  const [WorkPlacevalue, setWorkPlaceValue] = useState(
+    NavData ? NavData.environment_to_work_id : null
+  );
   const [WorkPlaceitems, setWorkPlaceItems] = useState([]);
 
   const [SalaryRangeopen, setSalaryRangeOpen] = useState(false);
-  const [SalaryRangevalue, setSalaryRangeValue] = useState(null);
+  const [SalaryRangevalue, setSalaryRangeValue] = useState(
+    NavData ? NavData.salary_range_id : null
+  );
   const [SalaryRangeitems, setSalaryRangeItems] = useState([]);
 
   const [Localityopen, setLocalityOpen] = useState(false);
-  const [Localityvalue, setLocalityValue] = useState(null);
+  const [Localityvalue, setLocalityValue] = useState(
+    NavData ? NavData.localilty_id : null
+  );
   const [Localityitems, setLocalityItems] = useState([]);
 
   const [AdditionalFacilityopen, setAdditionalFacilityOpen] = useState(false);
@@ -198,9 +215,26 @@ const PostJob = ({ route }: any) => {
   const fetchData = async () => {
     try {
       const response = await fetch(
+        "https://zingthing.ptechwebs.com/api/job-type-list"
+      );
+      const json = await response.json();
+      console.log("Cheking  for joob type", json.data);
+      const JobType = json.data.map((item: any) => {
+        return { label: item?.job_type, value: item?.id };
+      });
+      setItems(JobType);
+    } catch (error) {
+      // setError(error);
+    } finally {
+      // setLoading(false);
+    }
+
+    try {
+      const response = await fetch(
         "https://zingthing.ptechwebs.com/api/all-list"
       );
       const json = await response.json();
+      console.log("Checking : ", json);
       const JobTitle = json.data["JobTitle Lists"].map((item: any) => {
         return { label: item?.job_title, value: item?.id };
       });
@@ -310,18 +344,36 @@ const PostJob = ({ route }: any) => {
       data.append("job_post_date", moment().format("YYYY-MM-DD"));
       data.append("vendor_id", "1");
       data.append("job_title_id", JobTitlevalue);
-      data.append("business_id", BusinnesTypevalue ? BusinnesTypevalue : "");
+      data.append(
+        "business_id",
+        BusinnesTypevalue
+          ? Array.isArray(BusinnesTypevalue)
+            ? BusinnesTypevalue.join(",")
+            : BusinnesTypevalue
+          : ""
+      );
       data.append("working_time_id", WorkingTimevalue ? WorkingTimevalue : "");
       data.append("gender_id", GenderListvalue ? GenderListvalue : "");
       data.append(
         "line_of_educations_ids",
-        EducationLinevalue ? EducationLinevalue : ""
+        EducationLinevalue
+          ? Array.isArray(EducationLinevalue)
+            ? EducationLinevalue.join(",")
+            : EducationLinevalue
+          : ""
       );
       data.append(
         "qualification_id",
         Qualificationvalue ? Qualificationvalue : ""
       );
-      data.append("skill_id", AddSkillsvalue ? AddSkillsvalue : "");
+      data.append(
+        "skill_id",
+        AddSkillsvalue
+          ? Array.isArray(AddSkillsvalue)
+            ? AddSkillsvalue.join(",")
+            : AddSkillsvalue
+          : ""
+      );
       data.append(
         "experience_id",
         WorkExperiencevalue ? WorkExperiencevalue : ""
@@ -337,18 +389,22 @@ const PostJob = ({ route }: any) => {
       data.append("salary_range_id", SalaryRangevalue ? SalaryRangevalue : "");
       data.append(
         "facility_ids",
-        AdditionalFacilityvalue ? AdditionalFacilityvalue : ""
+        AdditionalFacilityvalue
+          ? Array.isArray(AdditionalFacilityvalue)
+            ? AdditionalFacilityvalue.join(",")
+            : AdditionalFacilityvalue
+          : ""
       );
       data.append("job_type_id", value ? value : "");
       data.append("job_post_subscription_id", "1");
       data.append("message", CandidateMessagevalue);
 
-      console.log("datadatadatadata", data);
-
       const response = await fetch(
-        "https://zingthing.ptechwebs.com/api/jobpost-add",
+        NavData
+          ? `https://zingthing.ptechwebs.com/api/jobpost-update/${NavData.id}`
+          : "https://zingthing.ptechwebs.com/api/jobpost-add",
         {
-          method: "POST",
+          method: NavData ? "PUT" : "POST",
           headers: {
             Accept: "application/json",
           },
@@ -357,11 +413,11 @@ const PostJob = ({ route }: any) => {
       );
 
       if (!response.ok) {
-        throw new Error("Network response was not ok");
+        console.log(response);
       }
 
       const json = await response.json();
-      console.log(json);
+      console.log("checking for React", json);
       Alert.alert(
         "CONGRATULATIONS",
         `YOUR REQUEST FOR JOB POST WITH NUMBER ${json?.data?.job_post_id} IS POSTED SUCCESSFULLY AND YOU WILL RECEIVE THE UPDATE NOTIFICATION IN CASE ANY CANDIDATE FITS YOUR JOB POST. YOUR JOB POST WILL REMAIN LIVE TILL ${sbscriptionDayes}. FOR ANY FURTHER ASSISTANCE, PLEASE CONTACT US ON 9723233194 / 9737333194 / 9824333194 / 9979333194 WITH YOUR JOB POST NUMBER.`,
@@ -373,7 +429,7 @@ const PostJob = ({ route }: any) => {
         ]
       );
     } catch (err: any) {
-      Alert.alert(err);
+      console.log(err);
     }
   };
   const setDropdownOpenFunction = (index) => {
@@ -431,7 +487,7 @@ const PostJob = ({ route }: any) => {
           scrollViewProps={{ nestedScrollEnabled: true }}
           open={open}
           value={value}
-          placeholder="Select Job Type (Single)"
+          placeholder="Select Job Type (Select Only One)"
           placeholderStyle={{
             color: COLORS.extraLightBlack,
             fontWeight: "500",
@@ -467,7 +523,7 @@ const PostJob = ({ route }: any) => {
           listMode="MODAL"
           open={JobTitleopen}
           scrollViewProps={{ nestedScrollEnabled: true }}
-          placeholder="Select Job Title (Single)"
+          placeholder="Select Job Title (Select Only One)"
           placeholderStyle={{
             color: COLORS.extraLightBlack,
             fontWeight: "500",
@@ -571,7 +627,7 @@ const PostJob = ({ route }: any) => {
               scrollViewProps={{ nestedScrollEnabled: true }}
               open={WorkingTimeopen}
               value={WorkingTimevalue}
-              placeholder="Select Time ( Single )"
+              placeholder="Select Time (Select Only One)"
               placeholderStyle={{
                 color: COLORS.extraLightBlack,
                 fontWeight: "500",
@@ -605,7 +661,7 @@ const PostJob = ({ route }: any) => {
               value={GenderListvalue}
               items={GenderListitems}
               setOpen={() => setDropdownOpenFunction(4)}
-              placeholder="Select Gender (Single)"
+              placeholder="Select Gender (Select Only One)"
               placeholderStyle={{
                 color: COLORS.extraLightBlack,
                 fontWeight: "500",
@@ -703,7 +759,7 @@ const PostJob = ({ route }: any) => {
               value={Qualificationvalue}
               items={Qualificationitems}
               dropDownDirection="BOTTOM"
-              placeholder="Select Qualification (Single)"
+              placeholder="Select Qualification (Select Only One)"
               placeholderStyle={{
                 color: COLORS.extraLightBlack,
                 fontWeight: "500",
@@ -802,7 +858,7 @@ const PostJob = ({ route }: any) => {
               value={WorkExperiencevalue}
               items={WorkExperienceitems}
               dropDownDirection="BOTTOM"
-              placeholder="Select Experience (Single)"
+              placeholder="Select Experience (Select Only One)"
               placeholderStyle={{
                 color: COLORS.extraLightBlack,
                 fontWeight: "500",
@@ -834,7 +890,7 @@ const PostJob = ({ route }: any) => {
               value={Vaccanciesvalue}
               items={Vaccanciesitems}
               dropDownDirection="BOTTOM"
-              placeholder="10 (Single)"
+              placeholder="10 (Select Only One)"
               placeholderStyle={{
                 color: COLORS.extraLightBlack,
                 fontWeight: "500",
@@ -1059,7 +1115,7 @@ const PostJob = ({ route }: any) => {
         <TextInput
           value={CandidateMessagevalue}
           onChangeText={(i) => setCandidateMessagevalue(i)}
-          placeholderTextColor={COLORS.SperatorColor}
+          placeholderTextColor={COLORS.extraLightBlack}
           textAlignVertical="top"
           style={{
             width: "100%",

@@ -15,6 +15,11 @@ buildscript {
         classpath("com.android.tools.build:gradle")
         classpath("com.facebook.react:react-native-gradle-plugin")
         classpath("org.jetbrains.kotlin:kotlin-gradle-plugin")
+
+        classpath 'com.google.gms:google-services:4.3.15'
+        classpath 'com.google.firebase:firebase-crashlytics-gradle:2.9.9'
+        // Add the dependency for the Performance Monitoring Gradle plugin
+        classpath 'com.google.firebase:perf-plugin:1.4.2'
     }
 }
 

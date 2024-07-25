@@ -1,10 +1,11 @@
 //import liraries
-import React, {createContext, useState} from 'react';
-import {View, StyleSheet, LogBox, StatusBar} from 'react-native';
-import Router from './src/screens/Router';
-import {COLORS} from './src/common/Utils/Colors';
-import Loader from './src/common/Components/Loader';
-import Network from './src/common/Components/Network';
+import React, { createContext, useState, useEffect } from "react";
+import { View, StyleSheet, LogBox, StatusBar, Alert } from "react-native";
+import Router from "./src/screens/Router";
+import { COLORS } from "./src/common/Utils/Colors";
+import Loader from "./src/common/Components/Loader";
+import Network from "./src/common/Components/Network";
+import messaging from "@react-native-firebase/messaging";
 
 // create a component
 export const LoaderContext = createContext();
@@ -12,9 +13,41 @@ export const LoaderContext = createContext();
 const App = () => {
   const [showLoader, setShowLoader] = useState(false);
   LogBox.ignoreAllLogs();
+
+  useEffect(() => {
+    requestUserPermission();
+    getFcmToken();
+
+    const unsubscribe = messaging().onMessage(async (remoteMessage) => {
+      Alert.alert("A new FCM message arrived!", JSON.stringify(remoteMessage));
+    });
+
+    return unsubscribe;
+  }, []);
+
+  async function requestUserPermission() {
+    const authStatus = await messaging().requestPermission();
+    const enabled =
+      authStatus === messaging.AuthorizationStatus.AUTHORIZED ||
+      authStatus === messaging.AuthorizationStatus.PROVISIONAL;
+
+    if (enabled) {
+      console.log("Authorization status:", authStatus);
+    }
+  }
+
+  async function getFcmToken() {
+    const fcmToken = await messaging().getToken();
+    if (fcmToken) {
+      console.log("Your Firebase Token is:", fcmToken);
+    } else {
+      console.log("Failed", "No token received");
+    }
+  }
+
   return (
     <View style={styles.container}>
-      <StatusBar backgroundColor={COLORS.White} barStyle={'dark-content'} />
+      <StatusBar backgroundColor={COLORS.White} barStyle={"dark-content"} />
       <LoaderContext.Provider value={[showLoader, setShowLoader]}>
         <Network />
         <Router />
