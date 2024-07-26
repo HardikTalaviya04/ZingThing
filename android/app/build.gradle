@@ -119,7 +119,10 @@ dependencies {
     implementation 'com.google.firebase:firebase-crashlytics'
     implementation 'com.google.firebase:firebase-perf'
     implementation platform('com.google.firebase:firebase-bom:31.0.2')
+    implementation project(':rn-fetch-blob')
+    implementation project(':react-native-permissions')
     implementation 'com.google.firebase:firebase-messaging'
+    implementation project(':react-native-fs')
 
 
     if (hermesEnabled.toBoolean()) {

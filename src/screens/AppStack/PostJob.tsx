@@ -12,7 +12,7 @@ import React, { useEffect, useRef, useState } from "react";
 import { COLORS } from "../../common/Utils/Colors";
 import AntDesign from "react-native-vector-icons/AntDesign";
 import { FONTS } from "../../common/Utils/fonts";
-import { useNavigation } from "@react-navigation/native";
+import { useFocusEffect, useNavigation } from "@react-navigation/native";
 const { width, height } = Dimensions.get("window");
 import { Picker } from "@react-native-picker/picker";
 import { ScrollView } from "react-native";
@@ -27,6 +27,8 @@ import moment from "moment";
 const PostJob = ({ route }: any) => {
   const NavData = route?.params?.MainItem ? route?.params?.MainItem : null;
   console.log("NavData", NavData);
+
+
   const navigation = useNavigation();
   const pickerRef = useRef();
   const [selectedLanguage, setSelectedLanguage] = useState();
@@ -117,6 +119,37 @@ const PostJob = ({ route }: any) => {
   const [sbscriptionAmount, setSbscriptionAmount] = useState(50);
   const [sbscriptionDayes, setSbscriptionDayes] = useState(10);
   const [sbscriptionInDayes, setSbscriptionInDayes] = useState(10);
+
+
+
+  useFocusEffect(
+    React.useCallback(()=>{
+      const LineOfEd=NavData?.line_of_educations.map((ele)=>{
+        return ele.line_of_educations_id
+      })
+      setEducationLineValue(LineOfEd)
+
+      const AddSkills=NavData?.skills?.map((ele)=>{
+        return ele.skill_id
+      })
+      setAddSkillsValue(AddSkills)
+
+      const Faclities=NavData?.facilities?.map((ele)=>{
+        return ele.facilities_id
+      })
+      setAdditionalFacilityValue(Faclities)
+      
+      const Businessid=NavData?.business?.map((ele)=>{
+        return ele.business_id
+      })
+      console.log("--id-navdata--",AddSkills,Businessid,Faclities)
+      setBusinnesTypeValue(Businessid)
+      
+    },[NavData])
+  )
+
+
+
   useEffect(() => {
     console.log(AdditionalFacilityvalue, AdditionalFacilityitems);
   }, [AdditionalFacilityvalue]);
@@ -346,7 +379,7 @@ const PostJob = ({ route }: any) => {
       data.append("vendor_id", "1");
       data.append("job_title_id", JobTitlevalue);
       data.append(
-        "business_id",
+        "business_ids",
         BusinnesTypevalue
           ? Array.isArray(BusinnesTypevalue)
             ? BusinnesTypevalue.join(",")
@@ -368,7 +401,7 @@ const PostJob = ({ route }: any) => {
         Qualificationvalue ? Qualificationvalue : ""
       );
       data.append(
-        "skill_id",
+        "skill_ids",
         AddSkillsvalue
           ? Array.isArray(AddSkillsvalue)
             ? AddSkillsvalue.join(",")
@@ -399,6 +432,9 @@ const PostJob = ({ route }: any) => {
       data.append("job_type_id", value ? value : "");
       data.append("job_post_subscription_id", "1");
       data.append("message", CandidateMessagevalue);
+
+
+      console.log('--dormfata--',data)
 
       const response = await fetch(
         NavData
@@ -591,9 +627,29 @@ const PostJob = ({ route }: any) => {
                 zIndex: 998,
               }}
               dropDownContainerStyle={styles.dropDownContainerStyle}
-              setItems={setItems}
+              setItems={setBusinnesTypeItems}
             />
-            <FlatList
+
+<FlatList
+              data={[1]}
+              keyExtractor={(item) => item}
+              renderItem={({ item, index }) =>
+                BusinnesTypevalue != null ? (
+                  typeof BusinnesTypevalue == "number" ? (
+                    <Text style={styles.itemText}>
+                      {BusinnesTypeitems[BusinnesTypevalue - 1].label},{" "}
+                    </Text>
+                  ) : (
+                    BusinnesTypevalue.map((items, indexx) => (
+                      <Text style={styles.itemText}>
+                        {BusinnesTypeitems?.[items - 1]?.label},{" "}
+                      </Text>
+                    ))
+                  )
+                ) : null
+              }
+            />
+            {/* <FlatList
               data={[1]}
               scrollEnabled={false}
               style={{ flexWrap: "wrap", marginTop: RFValue(5) }}
@@ -613,7 +669,7 @@ const PostJob = ({ route }: any) => {
                   )
                 ) : null
               }
-            />
+            /> */}
             <Text
               style={{
                 color: COLORS.TextBlack,
@@ -1079,7 +1135,27 @@ const PostJob = ({ route }: any) => {
               dropDownContainerStyle={styles.dropDownContainerStyle}
               setItems={setItems}
             />
-            <FlatList
+
+<FlatList
+              data={[1]}
+              keyExtractor={(item) => item}
+              renderItem={({ item, index }) =>
+                AdditionalFacilityvalue != null ? (
+                  typeof AdditionalFacilityvalue == "number" ? (
+                    <Text style={styles.itemText}>
+                      {AdditionalFacilityitems[AdditionalFacilityvalue - 1].label},{" "}
+                    </Text>
+                  ) : (
+                    AdditionalFacilityvalue.map((items, indexx) => (
+                      <Text style={styles.itemText}>
+                        {AdditionalFacilityitems?.[items - 1]?.label},{" "}
+                      </Text>
+                    ))
+                  )
+                ) : null
+              }
+            />
+            {/* <FlatList
               data={[1]}
               keyExtractor={(item) => item}
               renderItem={({ item, index }) =>
@@ -1101,7 +1177,7 @@ const PostJob = ({ route }: any) => {
                   )
                 ) : null
               }
-            />
+            /> */}
           </>
         )}
         <Text
