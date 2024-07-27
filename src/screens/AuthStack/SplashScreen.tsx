@@ -51,9 +51,13 @@ export const SplashScreen = () => {
         backgroundColor={COLORS.PrimeryColor}
         barStyle={"light-content"}
       />
-      <Text style={{ color: COLORS.White, fontSize: RFValue(20) }}>
+      <Image 
+      source={require('../../assets/images/Logo.png')}
+      style={{width:Dimensions.get('window').width*0.8,height:Dimensions.get('window').width,resizeMode:'contain'}}
+      />
+      {/* <Text style={{ color: COLORS.White, fontSize: RFValue(20) }}>
         Zing Thing
-      </Text>
+      </Text> */}
     </View>
   );
 };

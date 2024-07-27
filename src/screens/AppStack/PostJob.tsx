@@ -1,4 +1,5 @@
 import {
+  ActivityIndicator,
   Alert,
   Dimensions,
   StyleSheet,
@@ -119,6 +120,8 @@ const PostJob = ({ route }: any) => {
   const [sbscriptionAmount, setSbscriptionAmount] = useState(50);
   const [sbscriptionDayes, setSbscriptionDayes] = useState(10);
   const [sbscriptionInDayes, setSbscriptionInDayes] = useState(10);
+
+  const [isLoading,setisLoading]=useState(false)
 
 
 
@@ -248,6 +251,7 @@ const PostJob = ({ route }: any) => {
 
   const fetchData = async () => {
     try {
+      setisLoading(true)
       const response = await fetch(
         "https://zingthing.ptechwebs.com/api/job-type-list"
       );
@@ -361,6 +365,7 @@ const PostJob = ({ route }: any) => {
       console.log("object", moment(expirationDate).format("DD-MM-YYYY"));
       setSbscriptionDayes(moment(expirationDate).format("DD-MM-YYYY"));
       setSbscriptionInDayes(json.data[0].job_post_days);
+      setisLoading(false)
     } catch (error) {
       // setError(error);
     } finally {
@@ -374,7 +379,52 @@ const PostJob = ({ route }: any) => {
 
   const onSubmit = async () => {
     try {
-      const data = new FormData();
+      if(NavData)
+      {
+      const dataForEncode = {
+        job_post_date: moment().format("YYYY-MM-DD"),
+        vendor_id: "1",
+        job_title_id: JobTitlevalue,
+        business_ids: BusinnesTypevalue
+          ? Array.isArray(BusinnesTypevalue)
+            ? BusinnesTypevalue.join(",")
+            : BusinnesTypevalue
+          : "",
+        working_time_id: WorkingTimevalue ? WorkingTimevalue : "",
+        gender_id: GenderListvalue ? GenderListvalue : "",
+        line_of_educations_ids: EducationLinevalue
+          ? Array.isArray(EducationLinevalue)
+            ? EducationLinevalue.join(",")
+            : EducationLinevalue
+          : "",
+        qualification_id: Qualificationvalue ? Qualificationvalue : "",
+        skills_ids: AddSkillsvalue
+          ? Array.isArray(AddSkillsvalue)
+            ? AddSkillsvalue.join(",")
+            : AddSkillsvalue
+          : "",
+        experience_id: WorkExperiencevalue ? WorkExperiencevalue : "",
+        quantity_id: Vaccanciesvalue ? Vaccanciesvalue : "",
+        age_group_id: AgeListvalue ? AgeListvalue : "",
+        localilty_id: Localityvalue ? Localityvalue : "",
+
+        environment_to_work_id: WorkPlacevalue ? WorkPlacevalue : "",
+        place_of_posting: "Ahmedabad",
+        salary_range_id: SalaryRangevalue ? SalaryRangevalue : "",
+
+        facility_ids: AdditionalFacilityvalue
+          ? Array.isArray(AdditionalFacilityvalue)
+            ? AdditionalFacilityvalue.join(",")
+            : AdditionalFacilityvalue
+          : "",
+        job_type_id: value ? value : "",
+        job_post_subscription_id: "1",
+        message: CandidateMessagevalue,
+      };
+      var UrlEncodedData = new URLSearchParams(dataForEncode);
+    }
+    else{
+      var data = new FormData();
       data.append("job_post_date", moment().format("YYYY-MM-DD"));
       data.append("vendor_id", "1");
       data.append("job_title_id", JobTitlevalue);
@@ -401,7 +451,7 @@ const PostJob = ({ route }: any) => {
         Qualificationvalue ? Qualificationvalue : ""
       );
       data.append(
-        "skill_ids",
+        "skills_ids",
         AddSkillsvalue
           ? Array.isArray(AddSkillsvalue)
             ? AddSkillsvalue.join(",")
@@ -432,9 +482,10 @@ const PostJob = ({ route }: any) => {
       data.append("job_type_id", value ? value : "");
       data.append("job_post_subscription_id", "1");
       data.append("message", CandidateMessagevalue);
-
-
       console.log('--dormfata--',data)
+    }
+
+
 
       const response = await fetch(
         NavData
@@ -442,10 +493,14 @@ const PostJob = ({ route }: any) => {
           : "https://zingthing.ptechwebs.com/api/jobpost-add",
         {
           method: NavData ? "PUT" : "POST",
-          headers: {
+          headers: NavData?{
             Accept: "application/json",
+            "Content-Type":"application/x-www-form-urlencoded"
+          }:{
+            Accept: "application/json",
+            // "Content-Type":"application/x-www-form-urlencoded"
           },
-          body: data,
+          body: NavData?UrlEncodedData.toString():data
         }
       );
 
@@ -454,17 +509,23 @@ const PostJob = ({ route }: any) => {
       }
 
       const json = await response.json();
-      console.log("checking for React", json);
-      Alert.alert(
-        "CONGRATULATIONS",
-        `YOUR REQUEST FOR JOB POST WITH NUMBER ${json?.data?.job_post_id} IS POSTED SUCCESSFULLY AND YOU WILL RECEIVE THE UPDATE NOTIFICATION IN CASE ANY CANDIDATE FITS YOUR JOB POST. YOUR JOB POST WILL REMAIN LIVE TILL ${sbscriptionDayes}. FOR ANY FURTHER ASSISTANCE, PLEASE CONTACT US ON 9723233194 / 9737333194 / 9824333194 / 9979333194 WITH YOUR JOB POST NUMBER.`,
-        [
-          {
-            text: "OK",
-            onPress: (password) => navigation.navigate(SCREENS.DashBoard),
-          },
-        ]
-      );
+      if(json.code==200||json.code==201)
+      {
+        Alert.alert(
+          "CONGRATULATIONS",
+          `YOUR REQUEST FOR JOB POST WITH NUMBER ${NavData?(json?.data):(json?.data?.job_post_id)} IS POSTED SUCCESSFULLY AND YOU WILL RECEIVE THE UPDATE NOTIFICATION IN CASE ANY CANDIDATE FITS YOUR JOB POST. YOUR JOB POST WILL REMAIN LIVE TILL ${sbscriptionDayes}. FOR ANY FURTHER ASSISTANCE, PLEASE CONTACT US ON 9723233194 / 9737333194 / 9824333194 / 9979333194 WITH YOUR JOB POST NUMBER.`,
+          [
+            {
+              text: "OK",
+              onPress: (password) => navigation.navigate(SCREENS.DashBoard),
+            },
+          ]
+        );
+      }
+      else{
+        console.log("--Error-occurs--", json);
+
+      }
     } catch (err: any) {
       console.log(err);
     }
@@ -495,7 +556,7 @@ const PostJob = ({ route }: any) => {
         justifyContent: "center",
       }}
     >
-      <OnBordingHeader label={"Post Job"} Back={false} />
+      <OnBordingHeader label={NavData?"Update Job Post":"Post Job"} Back={false} />
       <ScrollView
         nestedScrollEnabled={true}
         showsVerticalScrollIndicator={false}
@@ -879,6 +940,7 @@ const PostJob = ({ route }: any) => {
               dropDownContainerStyle={styles.dropDownContainerStyle}
               setItems={setItems}
             />
+
             <FlatList
               data={[1]}
               keyExtractor={(item) => item}
@@ -1234,10 +1296,13 @@ const PostJob = ({ route }: any) => {
               fontWeight: "600",
             }}
           >
-            Pay & Submit Job Post
+            {NavData?"Pay & Update Job Post":"Pay & Submit Job Post"}
           </Text>
         </TouchableOpacity>
       </ScrollView>
+      {isLoading&&<View style={{flex:1,backgroundColor:'rgba(0,0,0,0.5)',position:'absolute',height:'100%',width:'100%',alignItems:'center',justifyContent:'center'}}>
+        <ActivityIndicator color={COLORS.White} size={Dimensions.get('window').width*0.2}/>
+      </View>}
     </View>
   );
 };

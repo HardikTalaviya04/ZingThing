@@ -290,7 +290,7 @@ export default function NewsFeed() {
   const fetchData = async () => {
     try {
       const response = await fetch(
-        "https://zingthing.ptechwebs.com/api/newsfeeds-list"
+        "https://zingthing.ptechwebs.com/api/newsfeeds-list/1"
       );
       const json = await response.json();
       console.log("object", json);
@@ -391,6 +391,18 @@ export default function NewsFeed() {
           }}
         >
           News Feed Expires : {item.expire_date}
+        </Text>
+        <Text
+          style={{
+            fontSize: RFValue(15),
+            color: "#4B4E6380",
+            fontWeight: "bold",
+            marginTop: RFValue(10),
+          }}
+        >
+          Status :<Text style={{
+            color: item.status=='active'?'green':'red',textTransform:'uppercase'}}> {item.status}
+            </Text>
         </Text>
         <TouchableOpacity
           onPress={() => requestStoragePermission({ FileUrl: item.document })}

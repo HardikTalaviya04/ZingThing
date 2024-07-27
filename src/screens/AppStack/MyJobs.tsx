@@ -42,10 +42,11 @@ export default function MyJobs() {
           `https://zingthing.ptechwebs.com/api/available-candiates-list/${ele.id}`
         );
         const json = await response.json();
-        if(json.data.length!=0)
+        if(json.data.length!=0&&json.data)
         {
+          setMainDataForSecoend([mainDataForSecoend,...json.data])
           console.log('--INSIDE_DAADADA--',json)
-          {json.data&&mainDataForSecoend.push(json.data)}
+          // {json.data&&mainDataForSecoend.push(json.data)}
         }
         // setMainDataForSecoend([mainDataForSecoend,...json.data]);
         setisLoading(false);
@@ -235,9 +236,7 @@ export default function MyJobs() {
             }}
           >
             {/* Hiring a account manager with 2+ yrs exp */}
-            {item?.job_title?.toLowerCase()}{
-              item?.experience
-            }
+            {item?.job_title}
           </Text>
         </View>
         <TouchableOpacity
@@ -268,7 +267,7 @@ export default function MyJobs() {
     );
   };
   const renderItemForSecoend = ({ item }) => {
-    console.log('--Available-Candidates--',item)
+    console.log('--Available-Candidates-data--',item)
     return (
       <View
         style={{
@@ -290,7 +289,7 @@ export default function MyJobs() {
       >
         <View>
           <Text style={[styles.secoendListBoxText, { paddingTop: RFValue(8) }]}>
-            Candiate Name : {item?.name}
+            Candidate Name : {item?.name}
           </Text>
           <Text style={styles.secoendListBoxText}>Location : {item?.city}</Text>
           <Text style={styles.secoendListBoxText}>
@@ -346,7 +345,7 @@ export default function MyJobs() {
               fontWeight: "bold",
             }}
           >
-            JOB ID : {item.id}
+            JOB ID : {item?.job_posts?.id}
           </Text>
         </TouchableOpacity>
       </View>
@@ -485,7 +484,7 @@ export default function MyJobs() {
             />
           ) : (
             <>
-              <Text
+              {/* <Text
                 style={{
                   fontSize: RFValue(17),
                   color: COLORS.Gray,
@@ -494,7 +493,7 @@ export default function MyJobs() {
                 }}
               >
                 Candidates matching Job posts
-              </Text>
+              </Text> */}
               <FlatList
                 contentContainerStyle={{
                   paddingBottom: RFValue(20),
