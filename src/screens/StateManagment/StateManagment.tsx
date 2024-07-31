@@ -5,7 +5,7 @@ import React, { createContext, useState } from 'react'
 export const ContextProvider=createContext()
 
 const ContextStates = ({children}) => {
-  const[Language,SetLanguage]=useState<String>('en')
+  const[Language,SetLanguage]=useState<String>('gu')
   return (
     <ContextProvider.Provider value={{Language,SetLanguage}}>{children}</ContextProvider.Provider>
   )

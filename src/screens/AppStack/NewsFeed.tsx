@@ -383,7 +383,7 @@ export default function NewsFeed() {
             fontWeight: "bold",
           }}
         >
-          News Feed Posted : {item.create_date}
+          {translator("NewsFeedPosted",Language)} : {item.create_date}
         </Text>
         <Text
           style={{
@@ -393,7 +393,7 @@ export default function NewsFeed() {
             marginTop: RFValue(10),
           }}
         >
-          News Feed Expires : {item.expire_date}
+          {translator("NewsFeedExpires",Language)} : {item.expire_date}
         </Text>
         <Text
           style={{
@@ -403,7 +403,7 @@ export default function NewsFeed() {
             marginTop: RFValue(10),
           }}
         >
-          Status :<Text style={{
+          {translator("Status",Language)} :<Text style={{
             color: item.status=='active'?'green':'red',textTransform:'uppercase'}}> {item.status}
             </Text>
         </Text>
@@ -428,7 +428,7 @@ export default function NewsFeed() {
           }}
         >
           <Text style={{ color: "#F58D3A", fontWeight: "bold" }}>
-            Total View : {item?.total_views}
+            {translator("TotalViews",Language)} : {item?.total_views}
           </Text>
         </View>
       </View>
@@ -437,7 +437,7 @@ export default function NewsFeed() {
 
   return (
     <View style={styles.mainBody}>
-      <OnBordingHeader label={translator("NewsFeed",Language)} Back={false} />
+      <OnBordingHeader label={"AddNewsFeed"} Back={false} />
       <ImageBackground
         source={IMAGE.BackgroundImg}
         resizeMode="contain"
@@ -487,7 +487,7 @@ export default function NewsFeed() {
                 fontWeight: "bold",
               }}
             >
-              View Existing Feed
+              {translator("ViewExistingFeed",Language)}
             </Text>
           </TouchableOpacity>
         </View>
@@ -556,7 +556,7 @@ export default function NewsFeed() {
                 borderRadius: RFValue(8),
               }}
             >
-              <Text style={{ color: COLORS.White }}>Upload PDF</Text>
+              <Text style={{ color: COLORS.White }}>{translator("UploadPDF",Language)}</Text>
             </TouchableOpacity>
           </View>
         ) : (

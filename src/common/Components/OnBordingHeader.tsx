@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useContext } from "react";
 import {
   TouchableOpacity,
   View,
@@ -17,9 +17,12 @@ import { SCREENS } from "../Utils/screenName";
 const ScreenHeight = Dimensions.get("screen").height;
 const ScreenWidth = Dimensions.get("screen").width;
 import MaterialIcons from 'react-native-vector-icons/MaterialIcons'
+import { translator } from "../../localization/I18n";
+import { ContextProvider } from "../../screens/StateManagment/StateManagment";
 
 const OnBordingHeader = ({ label, Back = true, isMyJob = false,Locale=false }: any) => {
   const navigation = useNavigation();
+  const {Language,SetLanguage} = useContext(ContextProvider)
   return (
     <View>
       <StatusBar
@@ -35,7 +38,7 @@ const OnBordingHeader = ({ label, Back = true, isMyJob = false,Locale=false }: a
             <Image source={IMAGE.Back} style={styles.backImge} />
           </TouchableOpacity>
         )}
-        <Text style={styles.headerText}>{label}</Text>
+        <Text style={styles.headerText}>{translator(label,Language)}</Text>
         {Locale&&(
           <TouchableOpacity>
             <MaterialIcons name="translate" size={24} color={COLORS.White}/>

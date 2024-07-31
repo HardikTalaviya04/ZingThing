@@ -10,7 +10,7 @@ import {
   TouchableOpacity,
   View,
 } from "react-native";
-import React, { useEffect, useState } from "react";
+import React, { useContext, useEffect, useState } from "react";
 import { COLORS } from "../../common/Utils/Colors";
 import AuthHeader from "../../common/Components/AuthHeader";
 import OnBordingHeader from "../../common/Components/OnBordingHeader";
@@ -21,16 +21,19 @@ import { useIsFocused, useNavigation } from "@react-navigation/native";
 import { SCREENS } from "../../common/Utils/screenName";
 import moment from "moment";
 import Loader from "../../common/Components/Loader";
+import { translator } from "../../localization/I18n";
+import { ContextProvider } from "../StateManagment/StateManagment";
 
 export default function MyJobs() {
   const [screenState, setscreenState] = useState(0);
-  const [isLoading, setisLoading] = useState(true);
+  const [isLoading, setisLoading] = useState(false);
   const [mainDataForFirst, setMainDataForFirst] = useState([]);
   const [mainDataForSecoend, setMainDataForSecoend] = useState([]);
   const ScreenHeight = Dimensions.get("screen").height;
   const ScreenWidth = Dimensions.get("screen").width;
   const navigation = useNavigation();
   const focus = useIsFocused();
+  const {Language,SetLanguage} = useContext(ContextProvider)
 
 
   const GetCandidateList=async(details)=>{
@@ -46,6 +49,7 @@ export default function MyJobs() {
         {
           setMainDataForSecoend([mainDataForSecoend,...json.data])
           console.log('--INSIDE_DAADADA--',json)
+        setisLoading(false);
           // {json.data&&mainDataForSecoend.push(json.data)}
         }
         // setMainDataForSecoend([mainDataForSecoend,...json.data]);
@@ -108,7 +112,7 @@ export default function MyJobs() {
                 fontWeight: "bold",
               }}
             >
-              JOB POST
+              {translator("POSTJOB",Language)}
             </Text>
           </TouchableOpacity>
           <Text
@@ -134,7 +138,8 @@ export default function MyJobs() {
             }}
           >
             {/* JOB ID: #JOB23984 */}
-            {`JOB ID: #JOB${item.id}`}
+            {translator("JOBID",Language)}
+            {`: #JOB${item.id}`}
           </Text>
           <View style={styles.BlackSprator} />
           <Text
@@ -162,7 +167,7 @@ export default function MyJobs() {
                 width: ScreenWidth * 0.48,
               }}
             >
-              Job Staus
+              {translator("JobStatus",Language)}
             </Text>
             <Text
               style={{
@@ -184,7 +189,7 @@ export default function MyJobs() {
                 width: ScreenWidth * 0.48,
               }}
             >
-              Job Post Renewal
+              {translator("JobPostRenewal",Language)}
             </Text>
             <Text
               style={{
@@ -223,7 +228,7 @@ export default function MyJobs() {
                 marginLeft: RFValue(10),
               }}
             >
-              Job Title
+              {translator("JobTitle",Language)}
             </Text>
           </View>
           <Text
@@ -260,7 +265,7 @@ export default function MyJobs() {
               fontWeight: "bold",
             }}
           >
-            {isExpired ? "Renew" : "Edit"}
+            {isExpired ? translator("JobPostRenewal",Language) : translator("Edit",Language)}
           </Text>
         </TouchableOpacity>
       </View>
@@ -345,7 +350,7 @@ export default function MyJobs() {
               fontWeight: "bold",
             }}
           >
-            JOB ID : {item?.job_posts?.id}
+            {translator("JOBID",Language)} : {item?.job_posts?.id}
           </Text>
         </TouchableOpacity>
       </View>
@@ -376,7 +381,7 @@ export default function MyJobs() {
 
   return (
     <View style={styles.mainBody}>
-      <OnBordingHeader label={"My Jobs"} Back={false} isMyJob={true} />
+      <OnBordingHeader label={"MyJobs"} Back={false} isMyJob={true} />
       <ImageBackground
         source={IMAGE.BackgroundImg}
         resizeMode="contain"
@@ -408,7 +413,7 @@ export default function MyJobs() {
                 fontWeight: "bold",
               }}
             >
-              {"    Job Post"}
+              {translator("POSTJOB",Language)}
             </Text>
           </TouchableOpacity>
           <TouchableOpacity
@@ -426,7 +431,7 @@ export default function MyJobs() {
                 fontWeight: "bold",
               }}
             >
-              Available candidates
+              {translator("AvailableCandidates",Language)}
             </Text>
           </TouchableOpacity>
         </View>

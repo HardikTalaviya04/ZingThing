@@ -9,7 +9,7 @@ import {
   TouchableOpacity,
   View,
 } from "react-native";
-import React, { useEffect, useRef, useState } from "react";
+import React, { useContext, useEffect, useRef, useState } from "react";
 import { COLORS } from "../../common/Utils/Colors";
 import AntDesign from "react-native-vector-icons/AntDesign";
 import { FONTS } from "../../common/Utils/fonts";
@@ -24,10 +24,13 @@ import { SCREENS } from "../../common/Utils/screenName";
 import RazorpayCheckout from "react-native-razorpay";
 import { FlatList } from "react-native";
 import moment from "moment";
+import { ContextProvider } from "../StateManagment/StateManagment";
+import { translator } from "../../localization/I18n";
 
 const PostJob = ({ route }: any) => {
   const NavData = route?.params?.MainItem ? route?.params?.MainItem : null;
   console.log("NavData", NavData);
+  const {Language,SetLanguage} = useContext(ContextProvider)
 
 
   const navigation = useNavigation();
@@ -556,7 +559,7 @@ const PostJob = ({ route }: any) => {
         justifyContent: "center",
       }}
     >
-      <OnBordingHeader label={NavData?"Update Job Post":"Post Job"} Back={false} />
+      <OnBordingHeader label={NavData?"UpdateJobPost":"POSTJOB"} Back={false} />
       <ScrollView
         nestedScrollEnabled={true}
         showsVerticalScrollIndicator={false}
@@ -578,7 +581,7 @@ const PostJob = ({ route }: any) => {
             fontWeight: "600",
           }}
         >
-          Job Type * :{" "}
+          {translator("JobType",Language)} * :{" "}
         </Text>
         <DropDownPicker
           listMode="SCROLLVIEW"
@@ -614,7 +617,7 @@ const PostJob = ({ route }: any) => {
             fontWeight: "600",
           }}
         >
-          Job Title :
+          {translator("JobTitle",Language)} :
         </Text>
         <DropDownPicker
           searchable={true}
@@ -652,7 +655,7 @@ const PostJob = ({ route }: any) => {
                 fontWeight: "600",
               }}
             >
-              Business Type :
+              {translator("BusinessType",Language)} :
             </Text>
             <DropDownPicker
               listMode="MODAL"
@@ -738,7 +741,7 @@ const PostJob = ({ route }: any) => {
                 fontWeight: "600",
               }}
             >
-              Job Time/Working Time :
+              {translator("JobTime/WorkingTime",Language)} :
             </Text>
             <DropDownPicker
               listMode="SCROLLVIEW"
@@ -770,7 +773,7 @@ const PostJob = ({ route }: any) => {
                 fontWeight: "600",
               }}
             >
-              Gender :
+              {translator("Gender",Language)} :
             </Text>
             <DropDownPicker
               listMode="SCROLLVIEW"
@@ -803,7 +806,7 @@ const PostJob = ({ route }: any) => {
                 fontWeight: "600",
               }}
             >
-              Line of Education :
+              {translator("LineofEducation",Language)} :
             </Text>
             <DropDownPicker
               max={3}
@@ -867,7 +870,7 @@ const PostJob = ({ route }: any) => {
                 fontWeight: "600",
               }}
             >
-              Qualification :
+              {translator("Qualification",Language)} :
             </Text>
             <DropDownPicker
               listMode="MODAL"
@@ -901,7 +904,7 @@ const PostJob = ({ route }: any) => {
                 fontWeight: "600",
               }}
             >
-              Additional Skills :
+              {translator("AdditionalSkills",Language)} :
             </Text>
             <DropDownPicker
               max={3}
@@ -967,7 +970,7 @@ const PostJob = ({ route }: any) => {
                 fontWeight: "600",
               }}
             >
-              Work Experience Years :
+              {translator("WorkExperienceYears",Language)} :
             </Text>
             <DropDownPicker
               listMode="MODAL"
@@ -1000,7 +1003,7 @@ const PostJob = ({ route }: any) => {
                 fontWeight: "600",
               }}
             >
-              NO. of Vacancies :
+              {translator("NOofVacancies",Language)} :
             </Text>
             <DropDownPicker
               listMode="SCROLLVIEW"
@@ -1033,7 +1036,7 @@ const PostJob = ({ route }: any) => {
                 fontWeight: "600",
               }}
             >
-              Age Group :
+              {translator("AgeGroup",Language)} :
             </Text>
             <DropDownPicker
               listMode="MODAL"
@@ -1066,7 +1069,7 @@ const PostJob = ({ route }: any) => {
                 fontWeight: "600",
               }}
             >
-              Work Place :
+              {translator("WorkPlace",Language)} :
             </Text>
             <DropDownPicker
               listMode="SCROLLVIEW"
@@ -1099,7 +1102,7 @@ const PostJob = ({ route }: any) => {
                 fontWeight: "600",
               }}
             >
-              Salary Range :
+              {translator("SalaryRange",Language)} :
             </Text>
             <DropDownPicker
               listMode="MODAL"
@@ -1132,7 +1135,7 @@ const PostJob = ({ route }: any) => {
                 fontWeight: "600",
               }}
             >
-              Locality :
+              {translator("Locality",Language)} :
             </Text>
             <DropDownPicker
               listMode="SCROLLVIEW"
@@ -1165,7 +1168,7 @@ const PostJob = ({ route }: any) => {
                 fontWeight: "600",
               }}
             >
-              Additional Facilities :
+              {translator("AdditionalFacilities",Language)} :
             </Text>
             <DropDownPicker
               searchable={true}
@@ -1249,7 +1252,7 @@ const PostJob = ({ route }: any) => {
             fontWeight: "600",
           }}
         >
-          Additonal Message :
+          {translator("AdditionalMessage",Language)} :
         </Text>
         <TextInput
           value={CandidateMessagevalue}
@@ -1296,7 +1299,7 @@ const PostJob = ({ route }: any) => {
               fontWeight: "600",
             }}
           >
-            {NavData?"Pay & Update Job Post":"Pay & Submit Job Post"}
+            {NavData?"Pay & Update Job Post":translator('Pay&SubmitJobPost',Language)}
           </Text>
         </TouchableOpacity>
       </ScrollView>
