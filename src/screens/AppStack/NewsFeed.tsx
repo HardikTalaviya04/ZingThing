@@ -11,7 +11,7 @@ import {
   TouchableOpacity,
   View,
 } from "react-native";
-import React, { useEffect, useState } from "react";
+import React, { useContext, useEffect, useState } from "react";
 import { COLORS } from "../../common/Utils/Colors";
 import AuthHeader from "../../common/Components/AuthHeader";
 import OnBordingHeader from "../../common/Components/OnBordingHeader";
@@ -26,6 +26,8 @@ import RNFetchBlob from "rn-fetch-blob";
 import { check, request, PERMISSIONS, RESULTS } from "react-native-permissions";
 import { Linking } from "react-native";
 import moment from "moment";
+import { ContextProvider } from "../StateManagment/StateManagment";
+import { translator } from "../../localization/I18n";
 
 export default function NewsFeed() {
   const [screenState, setscreenState] = useState(0);
@@ -35,6 +37,7 @@ export default function NewsFeed() {
   const ScreenHeight = Dimensions.get("screen").height;
   const ScreenWidth = Dimensions.get("screen").width;
   const [downloadProgress, setDownloadProgress] = useState(0);
+  const {Language,SetLanguage} = useContext(ContextProvider)
 
   const handlePayment = () => {
     var options = {
@@ -434,7 +437,7 @@ export default function NewsFeed() {
 
   return (
     <View style={styles.mainBody}>
-      <OnBordingHeader label={"News Feed"} Back={false} />
+      <OnBordingHeader label={translator("NewsFeed",Language)} Back={false} />
       <ImageBackground
         source={IMAGE.BackgroundImg}
         resizeMode="contain"
@@ -466,7 +469,7 @@ export default function NewsFeed() {
                 fontWeight: "bold",
               }}
             >
-              Post New Feed
+              {translator('PostNewFeed',Language)}
             </Text>
           </TouchableOpacity>
           <TouchableOpacity

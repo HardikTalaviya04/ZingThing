@@ -6,6 +6,7 @@ import { COLORS } from "./src/common/Utils/Colors";
 import Loader from "./src/common/Components/Loader";
 import Network from "./src/common/Components/Network";
 import messaging from "@react-native-firebase/messaging";
+import ContextStates from "./src/screens/StateManagment/StateManagment";
 
 // create a component
 export const LoaderContext = createContext();
@@ -46,6 +47,7 @@ const App = () => {
   }
 
   return (
+    <ContextStates>
     <View style={styles.container}>
       <StatusBar backgroundColor={COLORS.White} barStyle={"dark-content"} />
       <LoaderContext.Provider value={[showLoader, setShowLoader]}>
@@ -55,6 +57,7 @@ const App = () => {
         {showLoader && <Loader />}
       </LoaderContext.Provider>
     </View>
+    </ContextStates>
   );
 };
 

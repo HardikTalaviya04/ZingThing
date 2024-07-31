@@ -123,6 +123,7 @@ dependencies {
     implementation project(':react-native-permissions')
     implementation 'com.google.firebase:firebase-messaging'
     implementation project(':react-native-fs')
+    implementation project(':react-native-i18n')
 
 
     if (hermesEnabled.toBoolean()) {

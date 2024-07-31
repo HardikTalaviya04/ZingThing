@@ -16,7 +16,9 @@ import { useNavigation } from "@react-navigation/native";
 import { SCREENS } from "../Utils/screenName";
 const ScreenHeight = Dimensions.get("screen").height;
 const ScreenWidth = Dimensions.get("screen").width;
-const OnBordingHeader = ({ label, Back = true, isMyJob = false }: any) => {
+import MaterialIcons from 'react-native-vector-icons/MaterialIcons'
+
+const OnBordingHeader = ({ label, Back = true, isMyJob = false,Locale=false }: any) => {
   const navigation = useNavigation();
   return (
     <View>
@@ -34,7 +36,11 @@ const OnBordingHeader = ({ label, Back = true, isMyJob = false }: any) => {
           </TouchableOpacity>
         )}
         <Text style={styles.headerText}>{label}</Text>
-
+        {Locale&&(
+          <TouchableOpacity>
+            <MaterialIcons name="translate" size={24} color={COLORS.White}/>
+          </TouchableOpacity>
+        )}
         {isMyJob && (
           <TouchableOpacity
             activeOpacity={0.7}
